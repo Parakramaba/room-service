@@ -1,9 +1,11 @@
 package com.hifigod.roomservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "amenity")
@@ -17,7 +19,8 @@ public class Amenity implements Serializable {
     @Column(nullable = false, length = 254)
     private String name;
 
-    @Column(length = 254)
-    private String description;
+    @ManyToMany(mappedBy = "amenities")
+    @JsonIgnore
+    private List<Room> rooms;
 
 }

@@ -1,5 +1,7 @@
 package com.hifigod.roomservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ public class RoomType implements Serializable {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roomType")
+    @OneToMany(mappedBy = "roomType")
+    @JsonManagedReference
     private List<Room> rooms;
 }

@@ -27,4 +27,5 @@ public class RoomAvailability implements Serializable {
     private LocalTime startTime;
 
     private LocalTime endTime;
+
 }
