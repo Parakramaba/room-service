@@ -4,6 +4,7 @@ import com.hifigod.roomservice.dto.Response;
 import com.hifigod.roomservice.dto.RoomDto;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
 import com.hifigod.roomservice.exception.ValidationException;
+import com.hifigod.roomservice.model.Room;
 import com.hifigod.roomservice.service.RoomService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,13 @@ public class RoomController {
     public ResponseEntity<?> getAllAmenities() throws ResourceNotFoundException {
         return roomService.getAllAmenities();
     }
+
+//    @ApiOperation(value = "Get room amenities",
+//                notes = "Return amenities of the room")
+//    @GetMapping("/amenities")
+//    public ResponseEntity<?> getRoomAmenities(@RequestBody Room room) {
+//        return roomService.getRoomAmenities(room);
+//    }
 
 
 }

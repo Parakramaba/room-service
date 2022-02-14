@@ -1,6 +1,7 @@
 package com.hifigod.roomservice.service;
 
 import com.hifigod.roomservice.dto.Response;
+import com.hifigod.roomservice.dto.RoomAvailabilityDto;
 import com.hifigod.roomservice.dto.RoomDto;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
 import com.hifigod.roomservice.exception.ValidationException;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service("RoomService")
 public class RoomService {
@@ -51,7 +55,11 @@ public class RoomService {
         RoomType roomType = roomTypeRepository.findById(roomDto.getRoomTypeId()).
                 orElseThrow(()-> new ResourceNotFoundException("Room type not found : " + roomDto.getRoomTypeId()));
 
+
+        UUID roomId = UUID.randomUUID();
+//        String roomIdAsString = roomId.toString();
         Room room = new Room();
+        room.setId(roomId.toString());
         room.setUser(user);
         room.setRoomType(roomType);
         room.setName(roomDto.getName());
@@ -59,7 +67,7 @@ public class RoomService {
         room.setHourlyRate(roomDto.getHourlyRate());
         room.setNoOfGuest(roomDto.getNoOfGuest());
 
-        // TODO : room images uploading need to be handle
+        // TODO : room image uploading need to be handle
 
         room.setCountry(roomDto.getCountry());
         room.setStreetAddress(roomDto.getStreetAddress());
@@ -70,11 +78,10 @@ public class RoomService {
         room.setLatitude(roomDto.getLatitude());
         room.setLongitude(roomDto.getLongitude());
         room.setSetupCost(roomDto.getSetupCost());
-        room.setCreatedOn(LocalDateTime.now());
 
         // Insert room amenities
-        ArrayList<Amenity> amenitiesList = new ArrayList<Amenity>();
-        for (Integer amenityId:
+        ArrayList<Amenity> amenitiesList = new ArrayList<>();
+        for (String amenityId:
                 roomDto.getAmenitiesIdList()) {
             Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(()
                     -> new ResourceNotFoundException("Amenity not found : " + amenityId));
@@ -83,20 +90,20 @@ public class RoomService {
         room.setAmenities(amenitiesList);
         roomRepository.save(room);
 
-        // TODO : availabilities need to be handled
         // Insert room availabilities
 
-//        for (RoomAvailability availableSlot:
-//                roomDto.getRoomAvailabilities()) {
-//
-//            RoomAvailability roomAvailability = new RoomAvailability();
-//            roomAvailability.setRoom(availableSlot.getRoom());
-//            roomAvailability.setDay(availableSlot.getDay());
-//            roomAvailability.setSession(availableSlot.getSession());
-//            roomAvailability.setStartTime(availableSlot.getStartTime());
-//            roomAvailability.setEndTime(availableSlot.getEndTime());
-//            roomAvailabilityRepository.save(roomAvailability);
-//        }
+        for (RoomAvailabilityDto availableSlot:
+                roomDto.getRoomAvailabilities()) {
+                UUID roomAvailabilityId = UUID.randomUUID();
+            RoomAvailability roomAvailability = new RoomAvailability();
+            roomAvailability.setId(roomAvailabilityId.toString());
+            roomAvailability.setRoom(room);
+            roomAvailability.setDay(availableSlot.getDay());
+            roomAvailability.setSession(availableSlot.getSession());
+            roomAvailability.setStartTime(availableSlot.getStartTime());
+            roomAvailability.setEndTime(availableSlot.getEndTime());
+            roomAvailabilityRepository.save(roomAvailability);
+        }
 
         // TODO : setup information need to be handled
 
@@ -123,5 +130,18 @@ public class RoomService {
         return new ResponseEntity<>(amenityRepository.findAll(), HttpStatus.OK);
     }
 
-
+//    public ResponseEntity<?> getRoomAmenities(Room room) {
+//        List<Optional<Amenity>> optionalAmenities = amenityRepository.findAllByRooms(room);
+//        if(!optionalAmenities.isEmpty()) {
+//            Response response = new Response();
+//            response.setStatus(HttpStatus.OK.value());
+//            response.setError("");
+//            response.setMessage("");
+//            response.setDateTime(LocalDateTime.now());
+//            response.setData(optionalAmenities);
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        }
+//        else
+//            throw new ResourceNotFoundException("There are no room amenities");
+//    }
 }
