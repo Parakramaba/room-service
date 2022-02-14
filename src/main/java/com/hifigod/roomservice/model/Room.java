@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,10 +20,10 @@ import java.util.List;
 public class Room implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     @Column(nullable = false)
+    private String id;
+
+    @Column(nullable = false, length = 254)
     private String name;
 
     @Column(columnDefinition = "text")
@@ -46,8 +49,10 @@ public class Room implements Serializable {
     @Column(nullable = false)
     private int hourlyRate;
 
+//    @Column(columnDefinition = "decimal(10,8)")
     private Double latitude;
 
+//    @Column(columnDefinition = "decimal(11,8)")
     private Double longitude;
 
 //    @ManyToOne(optional = false)
@@ -71,23 +76,29 @@ public class Room implements Serializable {
 
     private long setupCost;
 
+    @Generated(value = GenerationTime.ALWAYS)
     @Column(columnDefinition = "varchar(50) default 'Not Verified'")
     private String verifyStatus;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime verifiedOn;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd hh:mm:ss")
-    private LocalDateTime createdOn;
+    @CreationTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
+
+//    @UpdateTimestamp
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    private LocalDateTime updatedAt;
 
     @ManyToMany
     @JoinTable(
             name = "roomAmenity",
-            joinColumns = @JoinColumn(name = "roomId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "amenityId", referencedColumnName = "id")
+            joinColumns = {@JoinColumn(name = "roomId", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "amenityId", referencedColumnName = "id")}
     )
     @JsonIgnore
     private List<Amenity> amenities;

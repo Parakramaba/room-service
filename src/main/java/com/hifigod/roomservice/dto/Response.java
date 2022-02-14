@@ -14,7 +14,7 @@ public class Response {
     private int status;
     private String error;
     private String message;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime dateTime;
     private Object data;
 

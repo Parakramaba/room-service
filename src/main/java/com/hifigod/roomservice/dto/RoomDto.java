@@ -1,6 +1,5 @@
 package com.hifigod.roomservice.dto;
 
-import com.hifigod.roomservice.model.RoomAvailability;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,10 +17,10 @@ public class RoomDto {
     private String description;
 
     @ApiModelProperty(notes = "User id of the room creator")
-    private long userId;
+    private String userId;
 
     @ApiModelProperty(notes = "Room type id")
-    private int roomTypeId;
+    private String roomTypeId;
 
     @ApiModelProperty(notes = "Number of guests which room can contain")
     private int noOfGuest;
@@ -46,9 +45,10 @@ public class RoomDto {
     private long setupCost;
 
     @ApiModelProperty(notes = "Set of room amenity ids")
-    private List<Integer> amenitiesIdList;
+    private List<String> amenitiesIdList;
 
-//    private List<RoomAvailability> roomAvailabilities;
+    @ApiModelProperty(notes = "Available time slots of the room in morning and evening sessions")
+    private List<RoomAvailabilityDto> roomAvailabilities;
 
 
 }
