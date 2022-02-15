@@ -43,6 +43,12 @@ public class RoomController {
         return roomService.getAllAmenities();
     }
 
+    @ApiOperation(value = "Get the room by id")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRoomById(@PathVariable("id") String roomId) throws ResourceNotFoundException {
+        return roomService.getRoomById(roomId);
+    }
+
 //    @ApiOperation(value = "Get room amenities",
 //                notes = "Return amenities of the room")
 //    @GetMapping("/amenities")

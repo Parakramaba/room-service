@@ -130,6 +130,19 @@ public class RoomService {
         return new ResponseEntity<>(amenityRepository.findAll(), HttpStatus.OK);
     }
 
+    public ResponseEntity<?> getRoomById(String roomId) throws ResourceNotFoundException {
+        Room room = roomRepository.findById(roomId).orElseThrow(() ->
+                new ResourceNotFoundException("Room not found : " + roomId));
+        Response response = new Response();
+        response.setStatus(HttpStatus.OK.value());
+//        response.setError("");
+//        response.setMessage("");
+        response.setDateTime(LocalDateTime.now());
+        response.setData(room);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 //    public ResponseEntity<?> getRoomAmenities(Room room) {
 //        List<Optional<Amenity>> optionalAmenities = amenityRepository.findAllByRooms(room);
 //        if(!optionalAmenities.isEmpty()) {
