@@ -19,7 +19,7 @@ public class SwaggerConfig {
     public Docket roomApi() {
         return new Docket(DocumentationType.SWAGGER_2).
                 select().
-                paths(PathSelectors.ant("/api/rooms/*")).
+                paths(PathSelectors.ant("/api/**")).
                 apis(RequestHandlerSelectors.basePackage("com.hifigod.roomservice")).
                 build().
                 apiInfo(roomApiInfo());

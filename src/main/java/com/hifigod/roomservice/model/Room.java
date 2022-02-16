@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "room")
+@Table(name = "room",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userId"}))
 @Data
 public class Room implements Serializable {
 

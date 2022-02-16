@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,8 @@ public class RoomService {
     @Autowired
     private RoomTypeRepository roomTypeRepository;
 
-    @Autowired
-    private RoomDocumentRepository roomDocumentRepository;
+//    @Autowired
+//    private RoomDocumentRepository roomDocumentRepository;
 
     @Autowired
     private AmenityRepository amenityRepository;
@@ -55,6 +56,12 @@ public class RoomService {
         RoomType roomType = roomTypeRepository.findById(roomDto.getRoomTypeId()).
                 orElseThrow(()-> new ResourceNotFoundException("Room type not found : " + roomDto.getRoomTypeId()));
 
+        // TODO: validate the name with userId uniqueness
+
+//        Optional<Room> optionalRoom = roomRepository.findByNameAndUserId(roomDto.getName(), user.getUserId());
+//
+//        if(optionalRoom.isPresent())
+//            throw new ValidationException("You have a room with the same name.Please give different name");
 
         UUID roomId = UUID.randomUUID();
 //        String roomIdAsString = roomId.toString();
@@ -122,12 +129,6 @@ public class RoomService {
         if(roomRepository.findAll().isEmpty())
             throw new ResourceNotFoundException("There are no rooms found");
         return new ResponseEntity<>(roomRepository.findAll(), HttpStatus.OK);
-    }
-
-    public ResponseEntity<?> getAllAmenities() throws ResourceNotFoundException {
-        if(amenityRepository.findAll().isEmpty())
-            throw new ResourceNotFoundException("There are no amenities found");
-        return new ResponseEntity<>(amenityRepository.findAll(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> getRoomById(String roomId) throws ResourceNotFoundException {

@@ -35,14 +35,6 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
-
-    @ApiOperation(value = "Get all amenities",
-                notes = "Return all available amenities")
-    @GetMapping("/amenities-list")
-    public ResponseEntity<?> getAllAmenities() throws ResourceNotFoundException {
-        return roomService.getAllAmenities();
-    }
-
     @ApiOperation(value = "Get the room by id")
     @GetMapping("/{id}")
     public ResponseEntity<?> getRoomById(@PathVariable("id") String roomId) throws ResourceNotFoundException {
