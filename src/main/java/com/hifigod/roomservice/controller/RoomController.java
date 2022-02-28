@@ -41,6 +41,12 @@ public class RoomController {
         return roomService.getRoomById(roomId);
     }
 
+    @ApiOperation(value = "Delete the room by id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteRoom(@PathVariable("id") String roomId) throws ResourceNotFoundException {
+        return roomService.deleteRoom(roomId);
+    }
+
     @ApiOperation(value = "Search the room by keyword",
     notes = "Return all rooms that match name, description, country or city with the keywords' consistent words")
     @GetMapping("/search/{keyword}")
@@ -51,9 +57,7 @@ public class RoomController {
 //    @ApiOperation(value = "Get room amenities",
 //                notes = "Return amenities of the room")
 //    @GetMapping("/amenities")
-//    public ResponseEntity<?> getRoomAmenities(@RequestBody Room room) {
-//        return roomService.getRoomAmenities(room);
+//    public ResponseEntity<?> getRoomAmenities(@RequestParam(name = "roomId") String roomId) {
+//        return roomService.getRoomAmenities(roomId);
 //    }
-
-
 }

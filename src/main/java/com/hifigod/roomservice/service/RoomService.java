@@ -53,7 +53,7 @@ public class RoomService {
         User user = userRepository.findById(roomDto.getUserId()).
                 orElseThrow(() -> new ResourceNotFoundException("User not found : " + roomDto.getUserId()));
         RoomType roomType = roomTypeRepository.findById(roomDto.getRoomTypeId()).
-                orElseThrow(()-> new ResourceNotFoundException("Room type not found : " + roomDto.getRoomTypeId()));
+                orElseThrow(() -> new ResourceNotFoundException("Room type not found : " + roomDto.getRoomTypeId()));
 
         // TODO: validate the name with userId uniqueness
 
@@ -131,8 +131,8 @@ public class RoomService {
     }
 
     public ResponseEntity<?> getRoomById(String roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findById(roomId).orElseThrow(() ->
-                new ResourceNotFoundException("Room not found : " + roomId));
+        Room room = roomRepository.findById(roomId).orElseThrow(()
+                -> new ResourceNotFoundException("Room not found : " + roomId));
         Response response = new Response();
         response.setStatus(HttpStatus.OK.value());
 //        response.setError("");
@@ -141,6 +141,14 @@ public class RoomService {
         response.setData(room);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> deleteRoom(String roomId) throws ResourceNotFoundException {
+        Room room = roomRepository.findById(roomId).orElseThrow(()
+                -> new ResourceNotFoundException("Room not found : " + roomId));
+
+        roomRepository.deleteById(roomId);
+        return new ResponseEntity<>("Room deleted successfully", HttpStatus.OK);
     }
 
     public ResponseEntity<?> searchRoom(String keyword) throws ResourceNotFoundException {
@@ -158,8 +166,8 @@ public class RoomService {
 
     // TODO: complete getRoomAmenities
 
-//    public ResponseEntity<?> getRoomAmenities(Room room) {
-//        List<Optional<Amenity>> optionalAmenities = amenityRepository.findAllByRooms(room);
+//    public ResponseEntity<?> getRoomAmenities(String roomId) {
+//        List<Optional<Amenity>> optionalAmenities = amenityRepository.findAllByRooms(roomId);
 //        if(!optionalAmenities.isEmpty()) {
 //            Response response = new Response();
 //            response.setStatus(HttpStatus.OK.value());

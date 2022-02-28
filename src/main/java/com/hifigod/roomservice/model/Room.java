@@ -10,6 +10,7 @@ import org.hibernate.annotations.*;
 //import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -102,7 +103,7 @@ public class Room implements Serializable {
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime updatedAt;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "roomAmenity",
             joinColumns = {@JoinColumn(name = "roomId", referencedColumnName = "id")},
@@ -117,7 +118,7 @@ public class Room implements Serializable {
 //    @OneToOne(mappedBy = "room")
 //    private SetupInformation setupInformation;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<RoomAvailability> roomAvailabilities;
 
