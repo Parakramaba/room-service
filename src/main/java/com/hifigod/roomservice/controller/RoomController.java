@@ -41,6 +41,13 @@ public class RoomController {
         return roomService.getRoomById(roomId);
     }
 
+    @ApiOperation(value = "Search the room by keyword",
+    notes = "Return all rooms that match name, description, country or city with the keywords' consistent words")
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<?> searchRoom(@PathVariable("keyword") String keyword) throws ResourceNotFoundException {
+        return roomService.searchRoom(keyword);
+    }
+
 //    @ApiOperation(value = "Get room amenities",
 //                notes = "Return amenities of the room")
 //    @GetMapping("/amenities")

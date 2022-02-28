@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.*;
+//import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+//import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+//@Indexed(index = "full_text_idx")
 @Table(name = "room",
         uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userId"}))
 @Data
@@ -24,9 +27,11 @@ public class Room implements Serializable {
     @Column(nullable = false)
     private String id;
 
+//    @FullTextField
     @Column(nullable = false, length = 254)
     private String name;
 
+//    @FullTextField
     @Column(columnDefinition = "text")
     private String description;
 
@@ -50,16 +55,17 @@ public class Room implements Serializable {
     @Column(nullable = false)
     private int hourlyRate;
 
-//    @Column(columnDefinition = "decimal(10,8)")
+    @Column(columnDefinition = "decimal(8,6)")
     private Double latitude;
 
-//    @Column(columnDefinition = "decimal(11,8)")
+    @Column(columnDefinition = "decimal(9,6)")
     private Double longitude;
 
 //    @ManyToOne(optional = false)
 //    @JoinColumn(name = "countryId", referencedColumnName = "id")
 //    private Country country;
 
+//    @FullTextField
     @Column(nullable = false, length = 254)
     private String country;
 
@@ -69,6 +75,7 @@ public class Room implements Serializable {
     @Column(nullable = false)
     private String apartmentNo;
 
+//    @FullTextField
     @Column(nullable = false, length = 254)
     private String city;
 

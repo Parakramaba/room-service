@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +142,21 @@ public class RoomService {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    public ResponseEntity<?> searchRoom(String keyword) throws ResourceNotFoundException {
+        ArrayList<Optional<Room>> rooms  = roomRepository.searchRoom(keyword);
+        if(rooms.isEmpty())
+            throw new ResourceNotFoundException("There are no rooms found : " + keyword);
+
+        Response response = new Response();
+        response.setStatus(HttpStatus.OK.value());
+        response.setDateTime(LocalDateTime.now());
+        response.setData(rooms);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    // TODO: complete getRoomAmenities
 
 //    public ResponseEntity<?> getRoomAmenities(Room room) {
 //        List<Optional<Amenity>> optionalAmenities = amenityRepository.findAllByRooms(room);

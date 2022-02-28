@@ -1,0 +1,32 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/room_service_db?createDatabaseIfNotExist=true
+    username: root
+    password: password
+  #  sql:
+  #    init:
+  #      mode: always
+  jpa:
+    show-sql: true
+    #    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format-sql: true
+  #        search:
+  #          backend:
+  #            lucene_version: LATEST
+  #            directory:
+  #              root: ./lucene/indexes
+  #            indexmanager: elasticsearch
+  #            elasticsearch:
+  #              host: <Elasticsearch-url>
+  #              index_schema_management_strategy: drop-and-create
+  #              required_index_status: yellow
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
