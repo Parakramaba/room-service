@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service("RoomService")
 public class RoomService {
@@ -86,7 +83,7 @@ public class RoomService {
         room.setSetupCost(roomDto.getSetupCost());
 
         // Insert room amenities
-        ArrayList<Amenity> amenitiesList = new ArrayList<>();
+        List<Amenity> amenitiesList = new ArrayList<>();
         for (String amenityId:
                 roomDto.getAmenitiesIdList()) {
             Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(()
@@ -163,16 +160,13 @@ public class RoomService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
-    // TODO: complete getRoomAmenities
-
 //    public ResponseEntity<?> getRoomAmenities(String roomId) {
-//        List<Optional<Amenity>> optionalAmenities = amenityRepository.findAllByRooms(roomId);
+//        Room room = roomRepository.findById(roomId).orElseThrow(()
+//                -> new ResourceNotFoundException("Room not found : " + roomId));
+//        List<Optional<?>> optionalAmenities = roomRepository.findAmenitiesById(roomId);
 //        if(!optionalAmenities.isEmpty()) {
 //            Response response = new Response();
 //            response.setStatus(HttpStatus.OK.value());
-//            response.setError("");
-//            response.setMessage("");
 //            response.setDateTime(LocalDateTime.now());
 //            response.setData(optionalAmenities);
 //            return new ResponseEntity<>(response, HttpStatus.OK);

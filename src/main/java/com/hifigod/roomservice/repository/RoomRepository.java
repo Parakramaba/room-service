@@ -12,9 +12,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, String> {
-//    List<Optional<Amenity>> findAllByRoomId(long roomId);
+//    @Query(value = "SELECT room.amenities FROM Room room WHERE room.id=?1")
+//    List<Optional<?>> findAmenitiesById(String roomId);
 //    List<Optional<Room>> findByName(String name);
 //    Optional<Room> findByNameAndUserId(String name, String userId);
+
+//    @Query(value = "DELETE FROM")
+//    void deleteAllById(String roomId);
+
 
     @Query(value = "SELECT * FROM room WHERE MATCH(name, description, country, city) AGAINST (?1)",
             nativeQuery = true)

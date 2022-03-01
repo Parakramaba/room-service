@@ -103,7 +103,7 @@ public class Room implements Serializable {
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime updatedAt;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(
             name = "roomAmenity",
             joinColumns = {@JoinColumn(name = "roomId", referencedColumnName = "id")},
@@ -117,6 +117,8 @@ public class Room implements Serializable {
 //
 //    @OneToOne(mappedBy = "room")
 //    private SetupInformation setupInformation;
+
+    // TODO: find the best practice to do the cascade deletion
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     @JsonIgnore

@@ -56,8 +56,8 @@ public class RoomController {
 
 //    @ApiOperation(value = "Get room amenities",
 //                notes = "Return amenities of the room")
-//    @GetMapping("/amenities")
-//    public ResponseEntity<?> getRoomAmenities(@RequestParam(name = "roomId") String roomId) {
+//    @GetMapping("/{id}/amenities")
+//    public ResponseEntity<?> getRoomAmenities(@PathVariable("id") String roomId) {
 //        return roomService.getRoomAmenities(roomId);
 //    }
 }
