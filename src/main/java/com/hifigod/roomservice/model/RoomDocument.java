@@ -2,6 +2,8 @@ package com.hifigod.roomservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,15 +20,17 @@ public class RoomDocument implements Serializable {
     @Column(nullable = false)
     private String id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "roomId", referencedColumnName = "id")
-    @JsonBackReference
-    private Room room;
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name = "roomId", referencedColumnName = "id")
+////    @JsonManagedReference
+//    @JsonIgnoreProperties("roomDocuments")
+//    private Room room;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "addedUserId", referencedColumnName = "userId")
-    @JsonBackReference
-    private User addedUser;
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name = "addedUserId", referencedColumnName = "userId")
+////    @JsonBackReference
+//    @JsonIgnoreProperties("roomDocuments")
+//    private User addedUser;
 
 //    private UserRole userRole;
 

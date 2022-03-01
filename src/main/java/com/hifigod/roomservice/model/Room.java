@@ -1,9 +1,6 @@
 package com.hifigod.roomservice.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import org.hibernate.annotations.*;
 //import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -36,18 +33,16 @@ public class Room implements Serializable {
     @Column(columnDefinition = "text")
     private String description;
 
-    // TODO : Resolve recursive data calls
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
-//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "FieldHandler"})
-    @JsonBackReference
+//    @JsonManagedReference
+    @JsonIgnoreProperties("rooms")
     private User user;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "roomTypeId", referencedColumnName = "id")
-//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "FieldHandler"})
-    @JsonBackReference
+//    @JsonManagedReference
+    @JsonIgnoreProperties("rooms")
     private RoomType roomType;
 
     @Column(nullable = false)
@@ -109,19 +104,23 @@ public class Room implements Serializable {
             joinColumns = {@JoinColumn(name = "roomId", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "amenityId", referencedColumnName = "id")}
     )
-    @JsonIgnore
+//    @JsonIgnore
+    @JsonIgnoreProperties("rooms")
     private List<Amenity> amenities;
 
 //    @OneToMany(mappedBy = "room")
-//    private List<RoomDocument> roomImages;
-//
+//    @JsonIgnoreProperties("room")
+//    private List<RoomDocument> roomDocuments;
+
 //    @OneToOne(mappedBy = "room")
+//    @JsonIgnoreProperties("room")
 //    private SetupInformation setupInformation;
 
     // TODO: find the best practice to do the cascade deletion
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
-    @JsonIgnore
+//    @JsonManagedReference
+    @JsonIgnoreProperties("room")
     private List<RoomAvailability> roomAvailabilities;
 
 }

@@ -1,8 +1,6 @@
 package com.hifigod.roomservice.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -23,13 +21,14 @@ public class User implements Serializable {
     //private String password;
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-//    @JsonIgnore
+//    @JsonBackReference
+    @JsonIgnoreProperties("user")
     private List<Room> rooms;
 
-    @OneToMany(mappedBy = "addedUser")
-    @JsonManagedReference
-    private List<RoomDocument> roomDocuments;
+//    @OneToMany(mappedBy = "addedUser")
+////    @JsonManagedReference
+//    @JsonIgnoreProperties("addedUser")
+//    private List<RoomDocument> roomDocuments;
 
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

@@ -1,6 +1,9 @@
 package com.hifigod.roomservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,6 +23,8 @@ public class RoomAvailability implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "roomId", referencedColumnName = "id")
+//    @JsonBackReference
+    @JsonIgnoreProperties("roomAvailabilities")
     private Room room;
 
     private String day;
