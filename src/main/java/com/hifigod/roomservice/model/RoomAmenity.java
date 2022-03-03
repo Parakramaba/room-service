@@ -1,22 +1,24 @@
 package com.hifigod.roomservice.model;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
-@Table(name = "roomAvailability")
-@SQLDelete(sql = "UPDATE room_availability SET deleted = true WHERE id=?")
+@Table(name = "roomAmenity")
+@SQLDelete(sql = "UPDATE room_amenity SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @Data
-public class RoomAvailability implements Serializable {
+public class RoomAmenity implements Serializable {
 
     @Id
     @Column(nullable = false)
@@ -24,29 +26,22 @@ public class RoomAvailability implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "roomId", referencedColumnName = "id")
-//    @JsonBackReference
-    @JsonIgnoreProperties("roomAvailabilities")
+    @JsonIgnoreProperties("roomAmenities")
     private Room room;
 
-    private String day;
-
-    private String session;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime startTime;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime endTime;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "amenityId", referencedColumnName = "id")
+    @JsonIgnoreProperties("roomAmenities")
+    private Amenity amenity;
 
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    //    @UpdateTimestamp
+//    @UpdateTimestamp
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime updatedAt;
 
     @JsonIgnore
     private boolean deleted = Boolean.FALSE;
-
 }

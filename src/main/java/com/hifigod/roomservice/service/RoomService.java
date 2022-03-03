@@ -34,6 +34,9 @@ public class RoomService {
     private AmenityRepository amenityRepository;
 
     @Autowired
+    private RoomAmenityRepository roomAmenityRepository;
+
+    @Autowired
     private RoomAvailabilityRepository roomAvailabilityRepository;
 
 
@@ -59,6 +62,7 @@ public class RoomService {
 //        if(optionalRoom.isPresent())
 //            throw new ValidationException("You have a room with the same name.Please give different name");
 
+        // Save basic room details
         UUID roomId = UUID.randomUUID();
 //        String roomIdAsString = roomId.toString();
         Room room = new Room();
@@ -81,20 +85,35 @@ public class RoomService {
         room.setLatitude(roomDto.getLatitude());
         room.setLongitude(roomDto.getLongitude());
         room.setSetupCost(roomDto.getSetupCost());
+//        roomRepository.save(room);
 
-        // Insert room amenities
-        List<Amenity> amenitiesList = new ArrayList<>();
+        // Save room amenities
+        ArrayList<RoomAmenity> roomAmenities = new ArrayList<>();
         for (String amenityId:
-                roomDto.getAmenitiesIdList()) {
+             roomDto.getAmenitiesIdList()) {
             Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(()
                     -> new ResourceNotFoundException("Amenity not found : " + amenityId));
-            amenitiesList.add(amenity);
+            UUID roomAmenityId = UUID.randomUUID();
+            RoomAmenity roomAmenity = new RoomAmenity();
+            roomAmenity.setId(roomAmenityId.toString());
+            roomAmenity.setRoom(room);
+            roomAmenity.setAmenity(amenity);
+            roomAmenities.add(roomAmenity);
+
         }
-        room.setAmenities(amenitiesList);
         roomRepository.save(room);
+        roomAmenityRepository.saveAll(roomAmenities);
 
-        // Insert room availabilities
+//        List<Amenity> amenitiesList = new ArrayList<>();
+//        for (String amenityId:
+//                roomDto.getAmenitiesIdList()) {
+//            Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(()
+//                    -> new ResourceNotFoundException("Amenity not found : " + amenityId));
+//            amenitiesList.add(amenity);
+//        }
+//        room.setAmenities(amenitiesList);
 
+        // Save room availabilities
         for (RoomAvailabilityDto availableSlot:
                 roomDto.getRoomAvailabilities()) {
                 UUID roomAvailabilityId = UUID.randomUUID();
@@ -163,7 +182,7 @@ public class RoomService {
 //    public ResponseEntity<?> getRoomAmenities(String roomId) {
 //        Room room = roomRepository.findById(roomId).orElseThrow(()
 //                -> new ResourceNotFoundException("Room not found : " + roomId));
-//        List<Optional<?>> optionalAmenities = roomRepository.findAmenitiesById(roomId);
+//        List<Optional<?>> optionalAmenities = roomAmenityRepository.findByRoomId(roomId);
 //        if(!optionalAmenities.isEmpty()) {
 //            Response response = new Response();
 //            response.setStatus(HttpStatus.OK.value());

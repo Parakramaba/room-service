@@ -18,6 +18,8 @@ import java.util.List;
 //@Indexed(index = "full_text_idx")
 @Table(name = "room",
         uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userId"}))
+@SQLDelete(sql = "UPDATE room SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 @Data
 public class Room implements Serializable {
 
@@ -98,15 +100,22 @@ public class Room implements Serializable {
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime updatedAt;
 
-    @ManyToMany
-    @JoinTable(
-            name = "roomAmenity",
-            joinColumns = {@JoinColumn(name = "roomId", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "amenityId", referencedColumnName = "id")}
-    )
-//    @JsonIgnore
-    @JsonIgnoreProperties("rooms")
-    private List<Amenity> amenities;
+    @JsonIgnore
+    private boolean deleted = Boolean.FALSE;
+
+//    @ManyToMany
+//    @JoinTable(
+//            name = "roomAmenity",
+//            joinColumns = {@JoinColumn(name = "roomId", referencedColumnName = "id")},
+//            inverseJoinColumns = {@JoinColumn(name = "amenityId", referencedColumnName = "id")}
+//    )
+////    @JsonIgnore
+//    @JsonIgnoreProperties("rooms")
+//    private List<Amenity> amenities;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties("room")
+    private List<RoomAmenity> roomAmenities;
 
 //    @OneToMany(mappedBy = "room")
 //    @JsonIgnoreProperties("room")

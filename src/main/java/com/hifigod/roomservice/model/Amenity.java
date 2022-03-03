@@ -23,10 +23,14 @@ public class Amenity implements Serializable {
     @Column(nullable = false, length = 254)
     private String name;
 
-    @ManyToMany(mappedBy = "amenities")
-//    @JsonIgnoreProperties("amenities")
+//    @ManyToMany(mappedBy = "amenities")
+////    @JsonIgnoreProperties("amenities")
+//    @JsonIgnore
+//    private List<Room> rooms;
+
+    @OneToMany(mappedBy = "amenity")
     @JsonIgnore
-    private List<Room> rooms;
+    private List<RoomAmenity> roomAmenities;
 
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
