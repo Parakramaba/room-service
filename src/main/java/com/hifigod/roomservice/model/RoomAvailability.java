@@ -14,7 +14,6 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "roomAvailability")
 @SQLDelete(sql = "UPDATE room_availability SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
 @Data
 public class RoomAvailability implements Serializable {
 

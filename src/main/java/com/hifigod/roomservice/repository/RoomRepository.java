@@ -12,8 +12,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, String> {
-//    @Query(value = "DELETE FROM")
-//    void deleteAllById(String roomId);
+
+    ArrayList<Optional<Room>> findAllByDeletedFalse();
+
+    Optional<Room> findByIdAndDeletedFalse(String id);
+
+    ArrayList<Optional<Room>> findAllByDeletedTrue();
+
+//    Optional<Room> findByIdAndDeletedTrue(String id);
 
 
     @Query(value = "SELECT * FROM room WHERE MATCH(name, description, country, city) AGAINST (?1) AND deleted=false",

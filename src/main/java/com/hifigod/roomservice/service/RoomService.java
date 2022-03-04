@@ -60,7 +60,7 @@ public class RoomService {
 //        Optional<Room> optionalRoom = roomRepository.findByNameAndUserId(roomDto.getName(), user.getUserId());
 //
 //        if(optionalRoom.isPresent())
-//            throw new ValidationException("You have a room with the same name.Please give different name");
+//            throw new ValidationException("You have a room with the same name.Please give different room name");
 
         // Save basic room details
         UUID roomId = UUID.randomUUID();
@@ -141,13 +141,13 @@ public class RoomService {
     }
 
     public ResponseEntity<?> getAllRooms() throws ResourceNotFoundException {
-        if(roomRepository.findAll().isEmpty())
+        if(roomRepository.findAllByDeletedFalse().isEmpty())
             throw new ResourceNotFoundException("There are no rooms found");
-        return new ResponseEntity<>(roomRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(roomRepository.findAllByDeletedFalse(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> getRoomById(String roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findById(roomId).orElseThrow(()
+        Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         Response response = new Response();
         response.setStatus(HttpStatus.OK.value());
@@ -160,7 +160,7 @@ public class RoomService {
     }
 
     public ResponseEntity<String> deleteRoom(String roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findById(roomId).orElseThrow(()
+        Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
 
         roomRepository.deleteById(roomId);
@@ -180,7 +180,7 @@ public class RoomService {
     }
 
 //    public ResponseEntity<?> getRoomAmenities(String roomId) {
-//        Room room = roomRepository.findById(roomId).orElseThrow(()
+//        Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
 //                -> new ResourceNotFoundException("Room not found : " + roomId));
 //        List<Optional<?>> optionalAmenities = roomAmenityRepository.findByRoomId(roomId);
 //        if(!optionalAmenities.isEmpty()) {

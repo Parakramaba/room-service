@@ -19,9 +19,10 @@ import java.util.List;
 @Table(name = "room",
         uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userId"}))
 @SQLDelete(sql = "UPDATE room SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
 @Data
 public class Room implements Serializable {
+
+    // TODO : Validation handling
 
     @Id
     @Column(nullable = false)
@@ -100,7 +101,7 @@ public class Room implements Serializable {
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime updatedAt;
 
-    @JsonIgnore
+//    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
 //    @ManyToMany
