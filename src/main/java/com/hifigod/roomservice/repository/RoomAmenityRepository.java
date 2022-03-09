@@ -11,4 +11,6 @@ public interface RoomAmenityRepository extends JpaRepository<RoomAmenity, String
 
 //    @Query(value = "SELECT amenity_id FROM room_amenity rAmenity WHERE rAmenity.room_id=?1", nativeQuery = true)
 //    List<Optional<?>> findByRoomId(String roomId);
+
+    Optional<RoomAmenity> findByRoomIdAndAmenityId(String roomId, String amenityId);
 }

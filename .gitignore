@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 application.properties
 application.yml
+schema2.sql
 
 ### STS ###
 .apt_generated

@@ -21,6 +21,8 @@ public interface RoomRepository extends JpaRepository<Room, String> {
 
 //    Optional<Room> findByIdAndDeletedTrue(String id);
 
+//    @Query(value = "SELECT * FROM room where user_id = ?1 AND deleted=false", nativeQuery = true)
+    ArrayList<Room> findAllByUserIdAndDeletedFalse(String userId);
 
     @Query(value = "SELECT * FROM room WHERE MATCH(name, description, country, city) AGAINST (?1) AND deleted=false",
             nativeQuery = true)

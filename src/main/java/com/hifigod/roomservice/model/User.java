@@ -16,7 +16,7 @@ public class User implements Serializable {
 
     @Id
     @Column(nullable = false)
-    private String userId;
+    private String id;
 
     //private String password;
 

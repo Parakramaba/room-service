@@ -7,20 +7,14 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@ApiModel(description = "Details about the room")
-public class RoomDto {
+@ApiModel(description = "Update details about the room")
+public class RoomUpdateDto {
 
     @ApiModelProperty(notes = "The room name")
     private String name;
 
     @ApiModelProperty(notes = "Detailed room description")
     private String description;
-
-    @ApiModelProperty(notes = "User id of the room creator")
-    private String userId;
-
-    @ApiModelProperty(notes = "Room type id")
-    private String roomTypeId;
 
     @ApiModelProperty(notes = "Number of guests which room can contain")
     private Integer noOfGuest;

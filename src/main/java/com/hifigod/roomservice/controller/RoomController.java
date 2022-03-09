@@ -2,6 +2,7 @@ package com.hifigod.roomservice.controller;
 
 import com.hifigod.roomservice.dto.Response;
 import com.hifigod.roomservice.dto.RoomDto;
+import com.hifigod.roomservice.dto.RoomUpdateDto;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
 import com.hifigod.roomservice.exception.ValidationException;
 import com.hifigod.roomservice.model.Room;
@@ -41,10 +42,23 @@ public class RoomController {
         return roomService.getRoomById(roomId);
     }
 
+    @ApiOperation(value = "Update the room details",
+            notes = "Provide valid room details to update")
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateRoom(@PathVariable("id") String roomId,@RequestBody RoomUpdateDto roomUpdateDto) throws ResourceNotFoundException {
+        return roomService.updateRoom(roomId, roomUpdateDto);
+    }
+
     @ApiOperation(value = "Delete the room by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRoom(@PathVariable("id") String roomId) throws ResourceNotFoundException {
         return roomService.deleteRoom(roomId);
+    }
+
+    @ApiOperation(value = "Get all rooms owned by a user")
+    @GetMapping("/of-user/{userId}")
+    public ResponseEntity<?> getRoomsByUser(@PathVariable("userId") String userId) throws ResourceNotFoundException {
+        return roomService.getRoomsByUser(userId);
     }
 
     @ApiOperation(value = "Search the room by keyword",

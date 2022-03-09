@@ -37,7 +37,7 @@ public class Room implements Serializable {
     private String description;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
 //    @JsonManagedReference
     @JsonIgnoreProperties("rooms")
     private User user;
@@ -49,10 +49,10 @@ public class Room implements Serializable {
     private RoomType roomType;
 
     @Column(nullable = false)
-    private int noOfGuest;
+    private Integer noOfGuest;
 
     @Column(nullable = false)
-    private int hourlyRate;
+    private Integer hourlyRate;
 
     @Column(columnDefinition = "decimal(8,6)")
     private Double latitude;
@@ -81,7 +81,7 @@ public class Room implements Serializable {
     @Column(nullable = false, length = 10)
     private String postCode;
 
-    private long setupCost;
+    private Long setupCost;
 
     @Generated(value = GenerationTime.ALWAYS)
     @Column(columnDefinition = "varchar(50) default 'Not Verified'")
