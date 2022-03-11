@@ -44,7 +44,7 @@ public class RoomService {
     public ResponseEntity<?> createRoom(RoomDto roomDto) throws ResourceNotFoundException,
             ValidationException {
         if(roomDto.getName() == null || roomDto.getName().length() == 0)
-            throw new ValidationException("Room name required");
+            throw new ValidationException("Room name is required");
 
 //        if(roomDto.getHourlyRate() < 0)
 //            throw new ValidationException("Hourly rate should be zero or positive number");

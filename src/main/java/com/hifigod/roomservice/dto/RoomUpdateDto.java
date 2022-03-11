@@ -41,7 +41,7 @@ public class RoomUpdateDto {
     @ApiModelProperty(notes = "Set of room amenity ids")
     private List<String> amenitiesIdList;
 
-    @ApiModelProperty(notes = "Available time slots of the room in morning and evening sessions")
+    @ApiModelProperty(notes = "Available time slots of the room")
     private List<RoomAvailabilityDto> roomAvailabilities;
 
 
