@@ -1,6 +1,7 @@
 package com.hifigod.roomservice.service;
 
 import com.hifigod.roomservice.dto.AmenityDto;
+import com.hifigod.roomservice.dto.Response;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
 import com.hifigod.roomservice.exception.ValidationException;
 import com.hifigod.roomservice.model.Amenity;
@@ -12,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service("AdminService")
 public class AdminService {
@@ -28,7 +27,7 @@ public class AdminService {
 
     // HANDLING ROOM DATA
     public ResponseEntity<?> getAllDeletedRooms() throws ResourceNotFoundException {
-        ArrayList<Optional<Room>> rooms = roomRepository.findAllByDeletedTrue();
+        List<Room> rooms = roomRepository.findAllByDeletedTrue();
         if(rooms.isEmpty())
             throw new ResourceNotFoundException("There are no deleted rooms found");
         return new ResponseEntity<>(rooms, HttpStatus.OK);
@@ -36,7 +35,7 @@ public class AdminService {
 
 
     // HANDLING AMENITY DATA
-    public ResponseEntity<String> createAmenity(AmenityDto amenityDto) throws ValidationException {
+    public ResponseEntity<?> createAmenity(AmenityDto amenityDto) throws ValidationException {
         if(amenityDto.getName() == null || amenityDto.getName().length() == 0)
             throw new ValidationException("Amenity name is required");
         Amenity amenity = new Amenity();
@@ -45,7 +44,15 @@ public class AdminService {
         amenity.setName(amenityDto.getName());
         amenityRepository.save(amenity);
 
-        return new ResponseEntity<>("Amenity created successfully", HttpStatus.OK);
+        // Response
+        Response response = new Response();
+        response.setStatus(HttpStatus.OK.value());
+        response.setError("");
+        response.setMessage("Amenity created Successfully");
+        response.setDateTime(LocalDateTime.now());
+        response.setData(amenity.getId());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

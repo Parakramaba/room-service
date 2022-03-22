@@ -1,7 +1,10 @@
 package com.hifigod.roomservice.model;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 //import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 //import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
@@ -20,6 +23,8 @@ import java.util.List;
         uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userId"}))
 @SQLDelete(sql = "UPDATE room SET deleted = true WHERE id=?")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Room implements Serializable {
 
     // TODO : Validation handling

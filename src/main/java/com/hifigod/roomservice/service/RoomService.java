@@ -224,14 +224,14 @@ public class RoomService {
     public ResponseEntity<?> getRoomsByUser(String userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new ResourceNotFoundException("User not found : " + userId));
-        ArrayList<Room> userRooms = roomRepository.findAllByUserIdAndDeletedFalse(userId);
+        List<Room> userRooms = roomRepository.findAllByUserIdAndDeletedFalse(userId);
         if(userRooms.isEmpty())
             throw new ResourceNotFoundException("There are no rooms for the user : " + userId);
         return new ResponseEntity<>(userRooms, HttpStatus.OK);
     }
 
     public ResponseEntity<?> searchRoom(String keyword) throws ResourceNotFoundException {
-        ArrayList<Optional<Room>> rooms  = roomRepository.searchRoom(keyword);
+        List<Room> rooms  = roomRepository.searchRoom(keyword);
         if(rooms.isEmpty())
             throw new ResourceNotFoundException("There are no rooms found : " + keyword);
 

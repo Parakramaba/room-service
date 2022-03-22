@@ -1,7 +1,9 @@
 package com.hifigod.roomservice.model;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,6 +15,8 @@ import java.util.List;
 @Entity
 @Table(name = "roomType")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoomType implements Serializable {
 
     @Id
