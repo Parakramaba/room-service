@@ -141,9 +141,10 @@ public class RoomService {
     }
 
     public ResponseEntity<?> getAllRooms() throws ResourceNotFoundException {
-        if(roomRepository.findAllByDeletedFalse().isEmpty())
+        List<Room> rooms = roomRepository.findAllByDeletedFalse();
+        if(rooms.isEmpty())
             throw new ResourceNotFoundException("There are no rooms found");
-        return new ResponseEntity<>(roomRepository.findAllByDeletedFalse(), HttpStatus.OK);
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 
     public ResponseEntity<?> getRoomById(String roomId) throws ResourceNotFoundException {

@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
-import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class AdminServiceTest {
+class AdminServiceTest {
 
     @Autowired
     private AdminService adminService;
@@ -34,21 +33,25 @@ public class AdminServiceTest {
 
     // TEST ROOM DATA
     @Test
-    public void getAllDeletedRooms_Success() {
-        Room room1 = new MockObjects().getRoom1();
-        Room room2 = new MockObjects().getRoom2();
-        when(roomRepository.findAllByDeletedTrue()).thenReturn(Stream
-                .of(room1, room2).collect(Collectors.toList()));
+    void getAllDeletedRooms_Success() {
+        Room room1 = new MockObjects().getDeletedRoom1();
+        Room room2 = new MockObjects().getDeletedRoom2();
+
+        when(roomRepository.findAllByDeletedTrue())
+                .thenReturn(Stream.of(room1, room2).collect(Collectors.toList()));
+
 //        assertEquals(new ArrayList<>(){{ add(room1); add(room2); }}, adminService.getAllDeletedRooms().getBody(),
 //                "Should return list of all deleted rooms");
         assertEquals(HttpStatus.OK, adminService.getAllDeletedRooms().getStatusCode(),
-                "Should return Status code '200 OK'");
+                "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).findAllByDeletedTrue();
     }
 
     @Test
-    public void getAllDeletedRooms_ThrowResourceNotFoundException_WhenNoDeletedRoomsFound () {
-        when(roomRepository.findAllByDeletedTrue()).thenReturn(Collections.emptyList());
+    void getAllDeletedRooms_ThrowResourceNotFoundException_WhenNoDeletedRoomsFound() {
+        when(roomRepository.findAllByDeletedTrue())
+                .thenThrow(ResourceNotFoundException.class);
+
         assertThrows(ResourceNotFoundException.class, () -> adminService.getAllDeletedRooms(),
                 "Should throw ResourceNotFoundException");
         verify(roomRepository, times(1)).findAllByDeletedTrue();
@@ -59,7 +62,7 @@ public class AdminServiceTest {
     // TEST AMENITY DATA
     // TODO: handle create when using DTOs
 //    @Test
-//    public void createAmenity_Success() {
+//    void createAmenity_Success() {
 //        Amenity amenity = new MockObjects().getAmenity1();
 //        when(amenityRepository.save(amenity)).thenReturn(amenity);
 //        ResponseEntity<?> responseEntity = adminService.createAmenity(new AmenityDto("Amenity-1"));
@@ -73,15 +76,18 @@ public class AdminServiceTest {
 //    }
 
     @Test
-    public void createAmenity_ThrowValidationException_WhenMandatoryFieldsAreMissing() {
+    void createAmenity_ThrowValidationException_WhenMandatoryFieldsAreMissing() {
         Amenity amenity = new MockObjects().getAmenity1();
-        when(amenityRepository.save(amenity)).thenReturn(amenity);
+
+        when(amenityRepository.save(amenity))
+                .thenReturn(amenity);
+
 //        String expectedMessage = "Amenity name is required";
 //        Exception exception = assertThrows(ValidationException.class, ()->adminService.createAmenity(new AmenityDto()));
 //        assertEquals(expectedMessage, exception.getMessage());
         assertThrows(ValidationException.class,()->adminService.createAmenity(new AmenityDto()),
                 "Should throw ValidationException");
-        verify(amenityRepository, times(0)).save(amenity);
+        verify(amenityRepository, never()).save(amenity);
     }
     // / TEST AMENITY DATA
 }
