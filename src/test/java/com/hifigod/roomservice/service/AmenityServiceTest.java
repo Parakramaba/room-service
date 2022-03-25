@@ -40,7 +40,7 @@ class AmenityServiceTest {
     }
 
     @Test()
-    void getAllAmenities_ThrowResourceNotFoundException_WhenNoAmenitiesFound() {
+    void getAllAmenities_WhenNoAmenitiesFound_ThrowResourceNotFoundException() {
         when(amenityRepository.findAll())
                 .thenThrow(ResourceNotFoundException.class);
 

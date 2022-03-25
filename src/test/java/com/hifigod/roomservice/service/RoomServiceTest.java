@@ -1,11 +1,9 @@
 package com.hifigod.roomservice.service;
 
+import com.hifigod.roomservice.dto.RoomDto;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
-import com.hifigod.roomservice.model.Room;
-import com.hifigod.roomservice.model.User;
-import com.hifigod.roomservice.repository.AmenityRepository;
-import com.hifigod.roomservice.repository.RoomRepository;
-import com.hifigod.roomservice.repository.UserRepository;
+import com.hifigod.roomservice.model.*;
+import com.hifigod.roomservice.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +32,12 @@ class RoomServiceTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private RoomTypeRepository roomTypeRepository;
+
+    @MockBean
+    private RoomAmenityRepository roomAmenityRepository;
+
     /**
      * # when(repositoryMockBean.JpaMethodName()).thenReturn(mockedObjectToReturn)
      *
@@ -45,8 +49,140 @@ class RoomServiceTest {
      * fundamentals(isolation of the unit) and that process need to be tested by integration test
      * */
     @Test
-    void createRoom() {
+    void createRoom_WithoutAmenities_Success() {
+        Room room = new MockObjects().getAvailableRoom1();
+        RoomDto roomDto = new MockObjects().getRoomDto();
+        User user = new MockObjects().getUser1();
+        RoomType roomType = new MockObjects().getRoomType1();
+
+        when(userRepository.findById("111"))
+                .thenReturn(Optional.of(user));
+        when(roomTypeRepository.findById("2"))
+                .thenReturn(Optional.of(roomType));
+        when(roomRepository.save(any(Room.class)))
+                .thenReturn(room);
+
+        assertEquals(HttpStatus.OK, roomService.createRoom(roomDto).getStatusCode(),
+                "Should have Status code '200 OK'");
+        verify(roomRepository, times(1)).save(any(Room.class));
     }
+
+    @Test
+    void createRoom_WhenUserNotFound_ThrowResourceNotFoundException() {
+        Room room = new MockObjects().getAvailableRoom1();
+        RoomDto roomDto = new MockObjects().getRoomDto();
+        RoomType roomType = new MockObjects().getRoomType1();
+
+        when(userRepository.findById("111"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(roomTypeRepository.findById("2"))
+                .thenReturn(Optional.of(roomType));
+        when(roomRepository.save(any(Room.class)))
+                .thenReturn(room);
+
+        assertThrows(ResourceNotFoundException.class, () -> roomService.createRoom(roomDto),
+                "Should throw ResourceNotFoundException");
+        verify(roomTypeRepository, never()).findById("2");
+        verify(roomRepository, never()).save(any(Room.class));
+    }
+
+    @Test
+    void createRoom_WhenRoomTypeNotFound_ThrowResourceNotFoundException() {
+        Room room = new MockObjects().getAvailableRoom1();
+        RoomDto roomDto = new MockObjects().getRoomDto();
+        User user = new MockObjects().getUser1();
+
+        when(userRepository.findById("111"))
+                .thenReturn(Optional.of(user));
+        when(roomTypeRepository.findById("2"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(roomRepository.save(any(Room.class)))
+                .thenReturn(room);
+
+        assertThrows(ResourceNotFoundException.class, () -> roomService.createRoom(roomDto),
+                "Should throw ResourceNotFoundException");
+        verify(roomTypeRepository, times(1)).findById("2");
+        verify(roomRepository, never()).save(any(Room.class));
+    }
+
+    @Test
+    void createRoom_WhenThereAreRoomAmenities_CreateRoomAmenities() {
+        List<RoomAmenity> roomAmenities = new MockObjects().getRoomAmenities();
+        Amenity amenity1 = new MockObjects().getAmenity1();
+        Amenity amenity2 = new MockObjects().getAmenity2();
+
+        Room room = new MockObjects().getRoomWithAmenities();
+        RoomDto roomDto = new MockObjects().getRoomDtoWithAmenities();
+
+        User user = new MockObjects().getUser1();
+        RoomType roomType = new MockObjects().getRoomType1();
+
+        // Mock Objects
+        when(userRepository.findById("111"))
+                .thenReturn(Optional.of(user));
+        when(roomTypeRepository.findById("1"))
+                .thenReturn(Optional.of(roomType));
+
+        when(amenityRepository.findById("123"))
+                .thenReturn(Optional.of(amenity1));
+        when(amenityRepository.findById("456"))
+                .thenReturn(Optional.of(amenity2));
+
+//        for (String amenityId:
+//                amenitiesIdList) {
+//            when(amenityRepository.findById("123"))
+//                    .thenReturn(Optional.of(amenity1));
+//            when(amenityRepository.findById("456"))
+//                    .thenReturn(Optional.of(amenity2));
+//        }
+        when(roomAmenityRepository.saveAll(any(ArrayList.class)))
+                .thenReturn(roomAmenities);
+        when(roomRepository.save(any(Room.class)))
+                .thenReturn(room);
+
+        assertEquals(HttpStatus.OK, roomService.createRoom(roomDto).getStatusCode(),
+                "Should have Status code '200 OK'");
+        verify(amenityRepository,times(2)).findById(any(String.class));
+        verify(roomAmenityRepository, times(1)).saveAll(any(ArrayList.class));
+    }
+
+    @Test
+    void createRoom_WhenAmenityNotFound_ThrowResourceNotFoundException() {
+        RoomDto roomDto = new MockObjects().getRoomDtoWithAmenities();
+        User user = new MockObjects().getUser1();
+        RoomType roomType = new MockObjects().getRoomType1();
+        Room room = new MockObjects().getRoomWithAmenities();
+        Amenity amenity = new MockObjects().getAmenity1();
+        List<RoomAmenity> roomAmenities = new MockObjects().getRoomAmenities();
+
+        // Mock objects
+        when(userRepository.findById("111"))
+                .thenReturn(Optional.of(user));
+        when(roomTypeRepository.findById("1"))
+                .thenReturn(Optional.of(roomType));
+
+        when(amenityRepository.findById("123"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(amenityRepository.findById("456"))
+                .thenReturn(Optional.of(amenity));
+
+        when(roomAmenityRepository.saveAll(any(ArrayList.class)))
+                .thenReturn(roomAmenities);
+        when(roomRepository.save(any(Room.class)))
+                .thenReturn(room);
+
+        /*
+        Code execution stops when the find of first amenity throws exception,
+        Therefore amenityRepository calls only once
+         */
+        assertThrows(ResourceNotFoundException.class, () -> roomService.createRoom(roomDto),
+                "Should throw ResourceNotFoundException");
+        verify(amenityRepository, times(1)).findById(any(String.class));
+        verify(roomRepository, never()).save(any(Room.class));
+        verify(roomAmenityRepository, never()).saveAll(any(ArrayList.class));
+    }
+
+    // TODO: test the room availabilities when verify
 
     @Test
     void getAllRooms_Success() {
@@ -62,7 +198,7 @@ class RoomServiceTest {
     }
 
     @Test
-    void getAllRooms_ThrowResourceNotFoundException_WhenNoRoomsFound() {
+    void getAllRooms_WhenNoRoomsFound_ThrowResourceNotFoundException() {
         when(roomRepository.findAllByDeletedFalse())
                 .thenThrow(ResourceNotFoundException.class);
 
@@ -86,7 +222,7 @@ class RoomServiceTest {
     }
 
     @Test
-    void getRoomById_ThrowResourceNotFoundException_WhenRoomNotFound() {
+    void getRoomById_WhenRoomNotFound_ThrowResourceNotFoundException() {
         when(roomRepository.findByIdAndDeletedFalse("111"))
                 .thenThrow(ResourceNotFoundException.class);
 
@@ -122,7 +258,7 @@ class RoomServiceTest {
     }
 
     @Test
-    void getRoomsByUser_ThrowResourceNotFoundException_WhenNoUserFound() {
+    void getRoomsByUser_WhenUserNotFound_ThrowResourceNotFoundException() {
         Room room1 = new MockObjects().getAvailableRoom1();
         Room room2 = new MockObjects().getAvailableRoom2();
 
@@ -138,7 +274,7 @@ class RoomServiceTest {
     }
 
     @Test
-    void getRoomsByUser_ThrowResourceNotFoundException_WhenNoRoomsFound() {
+    void getRoomsByUser_WhenNoRoomsFound_ThrowResourceNotFoundException() {
         User user = new MockObjects().getUser1();
 
         when(userRepository.findById("111"))
@@ -166,7 +302,7 @@ class RoomServiceTest {
     }
 
     @Test
-    void searchRoom_ThrowResourceNotFoundException_WhenNoRoomsFound() {
+    void searchRoom_WhenNoRoomsFound_ThrowResourceNotFoundException() {
         when(roomRepository.searchRoom("New"))
                 .thenThrow(ResourceNotFoundException.class);
 

@@ -86,7 +86,6 @@ public class RoomService {
         room.setLatitude(roomDto.getLatitude());
         room.setLongitude(roomDto.getLongitude());
         room.setSetupCost(roomDto.getSetupCost());
-//        roomRepository.save(room);
 
         // Save room amenities
         ArrayList<RoomAmenity> roomAmenities = new ArrayList<>();
@@ -114,6 +113,7 @@ public class RoomService {
 //        }
 //        room.setAmenities(amenitiesList);
 
+        // TODO: handle the room availabilities when verify
         // Save room availabilities
         for (RoomAvailabilityDto availableSlot:
                 roomDto.getRoomAvailabilities()) {
@@ -135,7 +135,7 @@ public class RoomService {
         response.setError("");
         response.setMessage("Room created Successfully");
         response.setDateTime(LocalDateTime.now());
-        response.setData(null);
+        response.setData(room.getId());
 
         return new ResponseEntity<> (response, HttpStatus.OK);
     }

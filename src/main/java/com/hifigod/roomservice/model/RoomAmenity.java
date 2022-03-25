@@ -3,7 +3,9 @@ package com.hifigod.roomservice.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ import java.time.LocalDateTime;
 @Table(name = "roomAmenity")
 @SQLDelete(sql = "UPDATE room_amenity SET deleted = true WHERE id=?")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoomAmenity implements Serializable {
 
     @Id

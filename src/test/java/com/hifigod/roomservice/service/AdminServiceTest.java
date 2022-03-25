@@ -48,7 +48,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void getAllDeletedRooms_ThrowResourceNotFoundException_WhenNoDeletedRoomsFound() {
+    void getAllDeletedRooms_WhenNoDeletedRoomsFound_ThrowResourceNotFoundException() {
         when(roomRepository.findAllByDeletedTrue())
                 .thenThrow(ResourceNotFoundException.class);
 
@@ -60,26 +60,23 @@ class AdminServiceTest {
     // / TEST ROOM DATA
 
     // TEST AMENITY DATA
-    // TODO: handle create when using DTOs
-//    @Test
-//    void createAmenity_Success() {
-//        Amenity amenity = new MockObjects().getAmenity1();
-//        when(amenityRepository.save(amenity)).thenReturn(amenity);
-//        ResponseEntity<?> responseEntity = adminService.createAmenity(new AmenityDto("Amenity-1"));
-//
-////        Amenity amenity1 = adminService.createAmenity(new AmenityDto("Amenity-2"));
-////        Response response = (Response) responseEntity.getBody();
-////        assertEquals(36, response.getData().toString().length(), "Should return 36");
-////        assertEquals(amenity, amenity1);
-//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-////        verify(amenityRepository, times(1)).save(amenity);
-//    }
+    @Test
+    void createAmenity_Success() {
+        Amenity amenity = new MockObjects().getAmenity1();
+        when(amenityRepository.save(any(Amenity.class)))
+                .thenReturn(amenity);
+
+//        Response response = (Response) adminService.createAmenity(new AmenityDto("Amenity-1")).getBody();
+//        assertEquals(amenity.getName(), response.getData().toString());
+        assertEquals(HttpStatus.OK, adminService.createAmenity(new AmenityDto("Amenity-1")).getStatusCode(),
+                "Should have Status code '200 OK'");
+        verify(amenityRepository, times(1)).save(any(Amenity.class));
+    }
 
     @Test
-    void createAmenity_ThrowValidationException_WhenMandatoryFieldsAreMissing() {
+    void createAmenity_WhenMandatoryFieldsAreMissing_ThrowValidationException() {
         Amenity amenity = new MockObjects().getAmenity1();
-
-        when(amenityRepository.save(amenity))
+        when(amenityRepository.save(any(Amenity.class)))
                 .thenReturn(amenity);
 
 //        String expectedMessage = "Amenity name is required";
