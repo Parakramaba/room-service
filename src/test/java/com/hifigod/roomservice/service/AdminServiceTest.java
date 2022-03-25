@@ -40,8 +40,6 @@ class AdminServiceTest {
         when(roomRepository.findAllByDeletedTrue())
                 .thenReturn(Stream.of(room1, room2).collect(Collectors.toList()));
 
-//        assertEquals(new ArrayList<>(){{ add(room1); add(room2); }}, adminService.getAllDeletedRooms().getBody(),
-//                "Should return list of all deleted rooms");
         assertEquals(HttpStatus.OK, adminService.getAllDeletedRooms().getStatusCode(),
                 "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).findAllByDeletedTrue();
@@ -66,8 +64,6 @@ class AdminServiceTest {
         when(amenityRepository.save(any(Amenity.class)))
                 .thenReturn(amenity);
 
-//        Response response = (Response) adminService.createAmenity(new AmenityDto("Amenity-1")).getBody();
-//        assertEquals(amenity.getName(), response.getData().toString());
         assertEquals(HttpStatus.OK, adminService.createAmenity(new AmenityDto("Amenity-1")).getStatusCode(),
                 "Should have Status code '200 OK'");
         verify(amenityRepository, times(1)).save(any(Amenity.class));

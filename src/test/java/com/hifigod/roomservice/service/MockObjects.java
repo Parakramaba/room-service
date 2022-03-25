@@ -1,6 +1,7 @@
 package com.hifigod.roomservice.service;
 
 import com.hifigod.roomservice.dto.RoomDto;
+import com.hifigod.roomservice.dto.RoomUpdateDto;
 import com.hifigod.roomservice.model.*;
 import lombok.Data;
 
@@ -51,6 +52,11 @@ public class MockObjects {
             "111", "1", 15, 45, 12.872123, 134.452981,
             "Sri Lanka", "Street Address-5", "AP:123RA", "Kandy",
             "34500", 20000L, amenitiesIdList , Collections.emptyList());
+
+    RoomUpdateDto roomUpdateDto = new RoomUpdateDto("Updating Room", "Description of Updating Room",
+            25, 30, 65.333333, 130.666666, "Sri Lanka",
+            "Street Address-6", "AP:123U", "Polonnaruwa", "12000",
+            15000L, Collections.emptyList(), Collections.emptyList());
 
     // Room
     Room deletedRoom1 = new Room(UUID.randomUUID().toString(), "Deleted Room-1", "Description of Deleted Room-1",

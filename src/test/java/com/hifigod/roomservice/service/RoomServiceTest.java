@@ -1,7 +1,9 @@
 package com.hifigod.roomservice.service;
 
 import com.hifigod.roomservice.dto.RoomDto;
+import com.hifigod.roomservice.dto.RoomUpdateDto;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
+import com.hifigod.roomservice.exception.ValidationException;
 import com.hifigod.roomservice.model.*;
 import com.hifigod.roomservice.repository.*;
 import org.junit.jupiter.api.Test;
@@ -48,6 +50,8 @@ class RoomServiceTest {
      * # If we call directly from one layer to another layer it will break the unit testing
      * fundamentals(isolation of the unit) and that process need to be tested by integration test
      * */
+
+    // CREATE ROOM
     @Test
     void createRoom_WithoutAmenities_Success() {
         Room room = new MockObjects().getAvailableRoom1();
@@ -184,6 +188,9 @@ class RoomServiceTest {
 
     // TODO: test the room availabilities when verify
 
+    // / CREATE ROOM
+
+    // GET ALL ROOMS
     @Test
     void getAllRooms_Success() {
         Room room1 = new MockObjects().getAvailableRoom1();
@@ -206,16 +213,15 @@ class RoomServiceTest {
                 "Should throw ResourceNotFoundException");
         verify(roomRepository, times(1)).findAllByDeletedFalse();
     }
+    // / GET ALL ROOMS
 
+    // GET ROOM BY ID
     @Test
     void getRoomById_Success() {
         Room room = new MockObjects().getAvailableRoom1();
         when(roomRepository.findByIdAndDeletedFalse(room.getId()))
                 .thenReturn(Optional.of(room));
 
-//        Response response = (Response) roomService.getRoomById(room.getId()).getBody();
-//        Room actualRoom = (Room) response.getData();
-//        assertEquals(room, actualRoom);
         assertEquals(HttpStatus.OK, roomService.getRoomById(room.getId()).getStatusCode(),
                 "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).findByIdAndDeletedFalse(room.getId());
@@ -230,15 +236,63 @@ class RoomServiceTest {
                 "Should throw ResourceNotFoundException");
         verify(roomRepository, times(1)).findByIdAndDeletedFalse("111");
     }
+    // / GET ROOM BY ID
 
+    // UPDATE ROOM
     @Test
-    void updateRoom() {
+    void updateRoom_WithoutAmenities_Success() {
+        RoomUpdateDto roomUpdateDto = new MockObjects().getRoomUpdateDto();
+        Room room = new MockObjects().getAvailableRoom1();
+
+        when(roomRepository.findByIdAndDeletedFalse("111"))
+                .thenReturn(Optional.of(room));
+        when(roomRepository.save(room))
+                .thenReturn(room);
+
+        assertEquals(HttpStatus.OK, roomService.updateRoom("111", roomUpdateDto).getStatusCode(),
+                "Should have Status code '200 OK'");
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
-    void deleteRoom() {
+    void updateRoom_WhenRoomNotFound_ThrowResourceNotFoundException() {
+        RoomUpdateDto roomUpdateDto = new MockObjects().getRoomUpdateDto();
+        when(roomRepository.findByIdAndDeletedFalse("111"))
+                .thenThrow(ResourceNotFoundException.class);
+
+        assertThrows(ResourceNotFoundException.class, () -> roomService.updateRoom("111", roomUpdateDto),
+                "Should throw ResourceNotFoundException");
+        verify(roomRepository, never()).save(any(Room.class));
     }
 
+    // TODO: test update the room with amenities(and availabilities ?) when verify
+
+    // / UPDATE ROOM
+
+    // DELETE ROOM
+    @Test
+    void deleteRoom_Success() {
+        Room room = new MockObjects().getAvailableRoom1();
+        when(roomRepository.findByIdAndDeletedFalse("1"))
+                .thenReturn(Optional.of(room));
+
+        assertEquals(HttpStatus.OK, roomService.deleteRoom("1").getStatusCode(),
+                "Should have Status code '200 OK'");
+        verify(roomRepository, times(1)).deleteById("1");
+    }
+
+    @Test
+    void deleteRoom_WhenRoomNotFound_ThrowResourceNotFoundException() {
+        when(roomRepository.findByIdAndDeletedFalse("1"))
+                .thenThrow(ResourceNotFoundException.class);
+
+        assertThrows(ResourceNotFoundException.class, () -> roomService.deleteRoom("1"),
+                "Should throw ResourceNotFoundException");
+        verify(roomRepository, never()).deleteById("1");
+    }
+    // / DELETE ROOM
+
+    // GET ROOMS BY USER
     @Test
     void getRoomsByUser_Success() {
         Room room1 = new MockObjects().getAvailableRoom1();
@@ -250,8 +304,6 @@ class RoomServiceTest {
         when(roomRepository.findAllByUserIdAndDeletedFalse("111"))
                 .thenReturn(Stream.of(room1, room2).collect(Collectors.toList()));
 
-//        assertEquals(new ArrayList<>(){{ add(room1); add(room2);}},
-//                roomService.getRoomsByUser("111").getBody());
         assertEquals(HttpStatus.OK, roomService.getRoomsByUser("111").getStatusCode(),
                 "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).findAllByUserIdAndDeletedFalse("111");
@@ -287,7 +339,9 @@ class RoomServiceTest {
         verify(roomRepository, times(1)).findAllByUserIdAndDeletedFalse("111");
 
     }
+    // / GET ROOMS BY USER
 
+    // SEARCH ROOM
     @Test
     void searchRoom_Success() {
         Room room1 = new MockObjects().getAvailableRoom1();
@@ -310,4 +364,5 @@ class RoomServiceTest {
                 "Should throw ResourceNotFoundException");
         verify(roomRepository, times(1)).searchRoom("New");
     }
+    // / SEARCH ROOM
 }
