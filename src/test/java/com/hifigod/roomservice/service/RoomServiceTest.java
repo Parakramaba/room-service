@@ -238,6 +238,53 @@ class RoomServiceTest {
     }
     // / GET ROOM BY ID
 
+    // GET ROOMS BY TYPE
+    @Test
+    void getRoomsByType_Success() {
+        Room room1 = new MockObjects().getAvailableRoom1();
+        Room room2 = new MockObjects().getAvailableRoom2();
+        RoomType roomType = new MockObjects().getRoomType1();
+
+        when(roomTypeRepository.findById("111"))
+                .thenReturn(Optional.of(roomType));
+        when(roomRepository.findAllByRoomTypeIdAndDeletedFalse("111"))
+                .thenReturn(new ArrayList<>() {{ add(room1); add(room2); }});
+
+        assertEquals(HttpStatus.OK, roomService.getRoomsByType("111").getStatusCode(),
+                "Should have Status code '200 OK'");
+        verify(roomRepository, times(1)).findAllByRoomTypeIdAndDeletedFalse("111");
+    }
+
+    @Test
+    void getRoomsByType_WhenRoomTypeNotFound_ThrowResourceNotFoundException () {
+        Room room1 = new MockObjects().getAvailableRoom1();
+        Room room2 = new MockObjects().getAvailableRoom2();
+
+        when(roomTypeRepository.findById("111"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(roomRepository.findAllByRoomTypeIdAndDeletedFalse("111"))
+                .thenReturn(new ArrayList<>() {{ add(room1); add(room2); }});
+
+        assertThrows(ResourceNotFoundException.class, () -> roomService.getRoomsByType("111"),
+                "Should throw ResourceNotFoundException");
+        verify(roomRepository, never()).findAllByRoomTypeIdAndDeletedFalse("111");
+    }
+
+    @Test
+    void getRoomsByType_WhenNoRoomsFound_ThrowResourceNotFoundException() {
+        RoomType roomType = new MockObjects().getRoomType1();
+
+        when(roomTypeRepository.findById("111"))
+                .thenReturn(Optional.of(roomType));
+        when(roomRepository.findAllByRoomTypeIdAndDeletedFalse("111"))
+                .thenReturn(Collections.emptyList());
+
+        assertThrows(ResourceNotFoundException.class, () -> roomService.getRoomsByType("111"),
+                "Should throw ResourceNotFoundException");
+        verify(roomRepository, times(1)).findAllByRoomTypeIdAndDeletedFalse("111");
+    }
+    // / GET ROOMS BY TYPE
+
     // UPDATE ROOM
     @Test
     void updateRoom_WithoutAmenities_Success() {

@@ -160,6 +160,21 @@ public class RoomService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    public ResponseEntity<?> getRoomsByType(String roomType) throws ResourceNotFoundException {
+        RoomType typeOfRoom = roomTypeRepository.findById(roomType).orElseThrow(()
+                -> new ResourceNotFoundException("Room type not found : " + roomType));
+        List<Room> rooms = roomRepository.findAllByRoomTypeIdAndDeletedFalse(roomType);
+        if(rooms.isEmpty())
+            throw new ResourceNotFoundException("There are no " +typeOfRoom.getName()+ " rooms found");
+
+        Response response = new Response();
+        response.setStatus(HttpStatus.OK.value());
+        response.setDateTime(LocalDateTime.now());
+        response.setData(rooms);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     public ResponseEntity<String> updateRoom(String roomId,RoomUpdateDto roomUpdateDto) throws ResourceNotFoundException {
         Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));

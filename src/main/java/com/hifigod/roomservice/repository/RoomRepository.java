@@ -15,6 +15,8 @@ public interface RoomRepository extends JpaRepository<Room, String> {
 
     List<Room> findAllByDeletedTrue();
 
+    List<Room> findAllByRoomTypeIdAndDeletedFalse(String roomType);
+
 //    Optional<Room> findByIdAndDeletedTrue(String id);
 
 //    @Query(value = "SELECT * FROM room where user_id = ?1 AND deleted=false", nativeQuery = true)

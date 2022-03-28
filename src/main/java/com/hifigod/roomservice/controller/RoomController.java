@@ -42,10 +42,17 @@ public class RoomController {
         return roomService.getRoomById(roomId);
     }
 
+    @ApiOperation(value = "Get rooms by the type")
+    @GetMapping("/by-type/{roomType}")
+    public ResponseEntity<?> getRoomsByType(@PathVariable("roomType") String roomType) throws ResourceNotFoundException {
+        return roomService.getRoomsByType(roomType);
+    }
+
     @ApiOperation(value = "Update the room details",
             notes = "Provide valid room details to update")
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateRoom(@PathVariable("id") String roomId,@RequestBody RoomUpdateDto roomUpdateDto) throws ResourceNotFoundException {
+    public ResponseEntity<String> updateRoom(@PathVariable("id") String roomId,@RequestBody RoomUpdateDto roomUpdateDto)
+            throws ResourceNotFoundException {
         return roomService.updateRoom(roomId, roomUpdateDto);
     }
 

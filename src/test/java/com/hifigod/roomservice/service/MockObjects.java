@@ -19,9 +19,9 @@ public class MockObjects {
     User user2 = new User(UUID.randomUUID().toString(), Collections.emptyList(), LocalDateTime.now());
 
     // RoomType
-    RoomType roomType1 = new RoomType(UUID.randomUUID().toString(),"Room type-1",
+    RoomType roomType1 = new RoomType(UUID.randomUUID().toString(),"Listening",
             Collections.emptyList(), LocalDateTime.now());
-    RoomType roomType2 = new RoomType(UUID.randomUUID().toString(),"Room type-2",
+    RoomType roomType2 = new RoomType(UUID.randomUUID().toString(),"Recording",
             Collections.emptyList(), LocalDateTime.now());
 
     // Amenity
