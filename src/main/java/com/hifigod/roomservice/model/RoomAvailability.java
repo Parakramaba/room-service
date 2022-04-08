@@ -1,7 +1,7 @@
 package com.hifigod.roomservice.model;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -14,7 +14,10 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "roomAvailability")
 @SQLDelete(sql = "UPDATE room_availability SET deleted = true WHERE id=?")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class RoomAvailability implements Serializable {
 
     @Id

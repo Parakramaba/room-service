@@ -2,7 +2,7 @@ package com.hifigod.roomservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,7 +11,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "setupInformation")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class SetupInformation implements Serializable {
 
     @Id

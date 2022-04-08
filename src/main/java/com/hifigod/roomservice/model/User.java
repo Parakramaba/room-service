@@ -1,10 +1,7 @@
 package com.hifigod.roomservice.model;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -14,9 +11,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 @Builder
 public class User implements Serializable {
 

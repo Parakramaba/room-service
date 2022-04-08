@@ -3,12 +3,15 @@ package com.hifigod.roomservice.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalTime;
 
-@Data
 @ApiModel(description = "Details about the rooms' availability")
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class RoomAvailabilityDto {
 
     @ApiModelProperty(notes = "Day of the week")

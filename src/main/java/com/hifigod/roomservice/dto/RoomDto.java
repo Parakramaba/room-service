@@ -2,16 +2,15 @@ package com.hifigod.roomservice.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
 @ApiModel(description = "Details about the room")
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class RoomDto {
 
     @ApiModelProperty(notes = "The room name")
