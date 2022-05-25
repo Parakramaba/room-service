@@ -18,8 +18,10 @@ public class AmenityService {
 
     public ResponseEntity<?> getAllAmenities() throws ResourceNotFoundException {
         List<Amenity> amenities = amenityRepository.findAll();
-        if(amenities.isEmpty())
+        if (amenities.isEmpty()) {
             throw new ResourceNotFoundException("There are no amenities found");
+        }
+
         return new ResponseEntity<>(amenities, HttpStatus.OK);
     }
 

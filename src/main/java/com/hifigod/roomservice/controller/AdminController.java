@@ -27,7 +27,7 @@ public class AdminController {
     @ApiOperation(value = "Create a new amenity",
             notes = "Provide valid amenity name")
     @PostMapping("/amenity/new")
-    public ResponseEntity<?> createAmenity(@RequestBody AmenityDto amenityDto) throws ValidationException {
+    public ResponseEntity<?> createAmenity(final @RequestBody AmenityDto amenityDto) throws ValidationException {
         return adminService.createAmenity(amenityDto);
     }
 

@@ -22,7 +22,7 @@ public class RoomController {
     @ApiOperation(value = "Create a new room",
             notes = "Provide valid room details to create a new room",
             response = Response.class)
-    public ResponseEntity<?> createListeningRoom(@RequestBody RoomDto roomDto) throws ResourceNotFoundException,
+    public ResponseEntity<?> createListeningRoom(final @RequestBody RoomDto roomDto) throws ResourceNotFoundException,
             ValidationException {
         return roomService.createRoom(roomDto);
     }
@@ -37,13 +37,13 @@ public class RoomController {
 
     @ApiOperation(value = "Get the room by id")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getRoomById(@PathVariable("id") String roomId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getRoomById(final @PathVariable("id") String roomId) throws ResourceNotFoundException {
         return roomService.getRoomById(roomId);
     }
 
     @ApiOperation(value = "Get rooms by the type")
     @GetMapping("/by-type/{roomType}")
-    public ResponseEntity<?> getRoomsByType(@PathVariable("roomType") String roomType)
+    public ResponseEntity<?> getRoomsByType(final @PathVariable("roomType") String roomType)
             throws ResourceNotFoundException {
         return roomService.getRoomsByType(roomType);
     }
@@ -51,27 +51,29 @@ public class RoomController {
     @ApiOperation(value = "Update the room details",
             notes = "Provide valid room details to update")
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateRoom(@PathVariable("id") String roomId,@RequestBody RoomUpdateDto roomUpdateDto)
-            throws ResourceNotFoundException {
+    public ResponseEntity<String> updateRoom(final @PathVariable("id") String roomId,
+            final @RequestBody RoomUpdateDto roomUpdateDto) throws ResourceNotFoundException {
         return roomService.updateRoom(roomId, roomUpdateDto);
     }
 
     @ApiOperation(value = "Delete the room by id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRoom(@PathVariable("id") String roomId) throws ResourceNotFoundException {
+    public ResponseEntity<String> deleteRoom(final @PathVariable("id") String roomId) throws ResourceNotFoundException {
         return roomService.deleteRoom(roomId);
     }
 
     @ApiOperation(value = "Get all rooms owned by a user")
     @GetMapping("/of-user/{userId}")
-    public ResponseEntity<?> getRoomsByUser(@PathVariable("userId") String userId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getRoomsByUser(final @PathVariable("userId") String userId)
+            throws ResourceNotFoundException {
         return roomService.getRoomsByUser(userId);
     }
 
     @ApiOperation(value = "Search the room by keyword",
     notes = "Return all rooms that match name, description, country or city with the keywords' consistent words")
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<?> searchRoom(@PathVariable("keyword") String keyword) throws ResourceNotFoundException {
+    public ResponseEntity<?> searchRoom(final @PathVariable("keyword") String keyword)
+            throws ResourceNotFoundException {
         return roomService.searchRoom(keyword);
     }
 
