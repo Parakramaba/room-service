@@ -5,7 +5,6 @@ import com.hifigod.roomservice.dto.RoomDto;
 import com.hifigod.roomservice.dto.RoomUpdateDto;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
 import com.hifigod.roomservice.exception.ValidationException;
-import com.hifigod.roomservice.model.Room;
 import com.hifigod.roomservice.service.RoomService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,8 @@ public class RoomController {
 
     @ApiOperation(value = "Get rooms by the type")
     @GetMapping("/by-type/{roomType}")
-    public ResponseEntity<?> getRoomsByType(@PathVariable("roomType") String roomType) throws ResourceNotFoundException {
+    public ResponseEntity<?> getRoomsByType(@PathVariable("roomType") String roomType)
+            throws ResourceNotFoundException {
         return roomService.getRoomsByType(roomType);
     }
 

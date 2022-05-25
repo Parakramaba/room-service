@@ -16,7 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<hibernate.version>5.6.5.Final</hibernate.version>
-<!--		<maven.version>2.6.3</maven.version>-->
+		<checkstyle.config.location>checkstyle-custom.xml</checkstyle.config.location>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -130,5 +130,15 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.2</version>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>

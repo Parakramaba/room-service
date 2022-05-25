@@ -1,7 +1,6 @@
 package com.hifigod.roomservice.repository;
 
 import com.hifigod.roomservice.model.Amenity;
-import com.hifigod.roomservice.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -175,7 +175,8 @@ public class RoomService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<String> updateRoom(String roomId,RoomUpdateDto roomUpdateDto) throws ResourceNotFoundException {
+    public ResponseEntity<String> updateRoom(String roomId,RoomUpdateDto roomUpdateDto)
+            throws ResourceNotFoundException {
         Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
 
