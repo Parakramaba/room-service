@@ -11,12 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * This Controller class provides set of API endpoints which are using in the Room handling process
+ */
 @RestController
-@RequestMapping("/api/rooms")
+@RequestMapping("/api/v1/rooms")
 public class RoomController {
 
+    // INJECT SERVICE OBJECT DEPENDENCY
     @Autowired
     private RoomService roomService;
+
 
     @PostMapping("/new")
     @ApiOperation(value = "Create a new room",
@@ -27,11 +32,10 @@ public class RoomController {
         return roomService.createRoom(roomDto);
     }
 
-
     @ApiOperation(value = "Get all rooms",
                 notes = "Return all available rooms")
     @GetMapping("/all")
-    public ResponseEntity<?> getAllRooms() throws ResourceNotFoundException {
+    public ResponseEntity<?> getAllRooms() {
         return roomService.getAllRooms();
     }
 
@@ -72,8 +76,7 @@ public class RoomController {
     @ApiOperation(value = "Search the room by keyword",
     notes = "Return all rooms that match name, description, country or city with the keywords' consistent words")
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<?> searchRoom(final @PathVariable("keyword") String keyword)
-            throws ResourceNotFoundException {
+    public ResponseEntity<?> searchRoom(final @PathVariable("keyword") String keyword) {
         return roomService.searchRoom(keyword);
     }
 

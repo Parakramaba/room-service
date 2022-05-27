@@ -16,20 +16,29 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * This Service class implements the business logic of the endpoints which are provided in the AdminController
+ * */
 @Service("AdminService")
 public class AdminService {
 
+    // INJECT REPOSITORY OBJECT DEPENDENCIES
     @Autowired
     private RoomRepository roomRepository;
 
     @Autowired
     private AmenityRepository amenityRepository;
+    // / INJECT REPOSITORY OBJECT DEPENDENCIES
 
     // HANDLING ROOM DATA
-    public ResponseEntity<?> getAllDeletedRooms() throws ResourceNotFoundException {
+    /**
+     * This returns a ResponseEntity with the List of deleted rooms
+     * @return List of deleted rooms
+     */
+    public ResponseEntity<?> getAllDeletedRooms() {
         List<Room> rooms = roomRepository.findAllByDeletedTrue();
         if (rooms.isEmpty()) {
-            throw new ResourceNotFoundException("There are no deleted rooms found");
+            return new ResponseEntity<>("There are no deleted rooms found", HttpStatus.OK);
         }
 
         return new ResponseEntity<>(rooms, HttpStatus.OK);
