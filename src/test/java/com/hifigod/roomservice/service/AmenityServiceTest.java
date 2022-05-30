@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,12 +41,12 @@ class AmenityServiceTest {
     }
 
     @Test()
-    void getAllAmenities_WhenNoAmenitiesFound_ThrowResourceNotFoundException() {
+    void getAllAmenities_WhenNoAmenitiesFound_Success() {
         when(amenityRepository.findAll())
-                .thenThrow(ResourceNotFoundException.class);
+                .thenReturn(Collections.emptyList());
 
-        assertThrows(ResourceNotFoundException.class,()-> amenityService.getAllAmenities(),
-                "Should throw ResourceNotFoundException");
+        assertEquals(HttpStatus.OK, amenityService.getAllAmenities().getStatusCode(),
+                "Should have Status code '200 OK'");
         verify(amenityRepository, times(1)).findAll();
     }
 }

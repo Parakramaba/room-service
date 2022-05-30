@@ -3,7 +3,6 @@ package com.hifigod.roomservice.service;
 import com.hifigod.roomservice.dto.RoomDto;
 import com.hifigod.roomservice.dto.RoomUpdateDto;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
-import com.hifigod.roomservice.exception.ValidationException;
 import com.hifigod.roomservice.model.*;
 import com.hifigod.roomservice.repository.*;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -205,12 +205,12 @@ class RoomServiceTest {
     }
 
     @Test
-    void getAllRooms_WhenNoRoomsFound_ThrowResourceNotFoundException() {
+    void getAllRooms_WhenNoRoomsFound_Success() {
         when(roomRepository.findAllByDeletedFalse())
-                .thenThrow(ResourceNotFoundException.class);
+                .thenReturn(Collections.emptyList());
 
-        assertThrows(ResourceNotFoundException.class, () -> roomService.getAllRooms(),
-                "Should throw ResourceNotFoundException");
+        assertEquals(HttpStatus.OK, roomService.getAllRooms().getStatusCode(),
+                "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).findAllByDeletedFalse();
     }
     // / GET ALL ROOMS
@@ -271,7 +271,7 @@ class RoomServiceTest {
     }
 
     @Test
-    void getRoomsByType_WhenNoRoomsFound_ThrowResourceNotFoundException() {
+    void getRoomsByType_WhenNoRoomsFound_Success() {
         RoomType roomType = new MockObjects().getRoomType1();
 
         when(roomTypeRepository.findById("111"))
@@ -279,8 +279,8 @@ class RoomServiceTest {
         when(roomRepository.findAllByRoomTypeIdAndDeletedFalse("111"))
                 .thenReturn(Collections.emptyList());
 
-        assertThrows(ResourceNotFoundException.class, () -> roomService.getRoomsByType("111"),
-                "Should throw ResourceNotFoundException");
+        assertEquals(HttpStatus.OK, roomService.getRoomsByType("111").getStatusCode(),
+                "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).findAllByRoomTypeIdAndDeletedFalse("111");
     }
     // / GET ROOMS BY TYPE
@@ -373,16 +373,16 @@ class RoomServiceTest {
     }
 
     @Test
-    void getRoomsByUser_WhenNoRoomsFound_ThrowResourceNotFoundException() {
+    void getRoomsByUser_WhenNoRoomsFound_Success() {
         User user = new MockObjects().getUser1();
 
         when(userRepository.findById("111"))
                 .thenReturn(Optional.of(user));
         when(roomRepository.findAllByUserIdAndDeletedFalse("111"))
-                .thenThrow(ResourceNotFoundException.class);
+                .thenReturn(Collections.emptyList());
 
-        assertThrows(ResourceNotFoundException.class, () -> roomService.getRoomsByUser("111"),
-                "Should throw ResourceNotFoundException");
+        assertEquals(HttpStatus.OK, roomService.getRoomsByUser("111").getStatusCode(),
+                "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).findAllByUserIdAndDeletedFalse("111");
 
     }
@@ -403,12 +403,12 @@ class RoomServiceTest {
     }
 
     @Test
-    void searchRoom_WhenNoRoomsFound_ThrowResourceNotFoundException() {
+    void searchRoom_WhenNoRoomsFound_Success() {
         when(roomRepository.searchRoom("New"))
-                .thenThrow(ResourceNotFoundException.class);
+                .thenReturn(Collections.emptyList());
 
-        assertThrows(ResourceNotFoundException.class, () -> roomService.searchRoom("New"),
-                "Should throw ResourceNotFoundException");
+        assertEquals(HttpStatus.OK, roomService.searchRoom("New").getStatusCode(),
+                "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).searchRoom("New");
     }
     // / SEARCH ROOM

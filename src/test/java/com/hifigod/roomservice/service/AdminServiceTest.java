@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,12 +47,12 @@ class AdminServiceTest {
     }
 
     @Test
-    void getAllDeletedRooms_WhenNoDeletedRoomsFound_ThrowResourceNotFoundException() {
+    void getAllDeletedRooms_WhenNoDeletedRoomsFound_Success() {
         when(roomRepository.findAllByDeletedTrue())
-                .thenThrow(ResourceNotFoundException.class);
+                .thenReturn(Collections.emptyList());
 
-        assertThrows(ResourceNotFoundException.class, () -> adminService.getAllDeletedRooms(),
-                "Should throw ResourceNotFoundException");
+        assertEquals(HttpStatus.OK, adminService.getAllDeletedRooms().getStatusCode(),
+                "Should have Status code '200 OK'");
         verify(roomRepository, times(1)).findAllByDeletedTrue();
 
     }
