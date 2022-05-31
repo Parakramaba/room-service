@@ -47,9 +47,9 @@ public class RoomController {
 
     @ApiOperation(value = "Get rooms by the type")
     @GetMapping("/by-type/{roomType}")
-    public ResponseEntity<?> getRoomsByType(final @PathVariable("roomType") String roomType)
+    public ResponseEntity<?> getRoomsByType(final @PathVariable("roomType") String roomTypeId)
             throws ResourceNotFoundException {
-        return roomService.getRoomsByType(roomType);
+        return roomService.getRoomsByType(roomTypeId);
     }
 
     @ApiOperation(value = "Update the room details",

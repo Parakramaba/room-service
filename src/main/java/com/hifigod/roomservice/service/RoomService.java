@@ -4,7 +4,6 @@ import com.hifigod.roomservice.dto.Response;
 import com.hifigod.roomservice.dto.RoomAvailabilityDto;
 import com.hifigod.roomservice.dto.RoomDto;
 import com.hifigod.roomservice.dto.RoomUpdateDto;
-import com.hifigod.roomservice.exception.ErrorMessages;
 import com.hifigod.roomservice.exception.ResourceNotFoundException;
 import com.hifigod.roomservice.exception.ValidationException;
 import com.hifigod.roomservice.model.*;
@@ -46,6 +45,10 @@ public class RoomService {
     private RoomAvailabilityRepository roomAvailabilityRepository;
     // / INJECT REPOSITORY OBJECT DEPENDENCIES
 
+    // INJECT SERVICE OBJECT DEPENDENCIES
+    @Autowired
+    private UtilService utilService;
+
 
     public ResponseEntity<?> createRoom(final RoomDto roomDto) throws ResourceNotFoundException,
             ValidationException {
@@ -58,10 +61,8 @@ public class RoomService {
 //        if(roomDto.getNoOfGuest() < 0)
 //            throw new ValidationException("Number of guest should be zero or positive number");
 
-        User user = userRepository.findById(roomDto.getUserId()).
-                orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND_MSG + roomDto.getUserId()));
-        RoomType roomType = roomTypeRepository.findById(roomDto.getRoomTypeId()).
-                orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.ROOM_TYPE_NOT_FOUND_MSG + roomDto.getRoomTypeId()));
+        User user = utilService.checkUserById(roomDto.getUserId());
+        RoomType roomType = utilService.checkRoomTypeById(roomDto.getRoomTypeId());
 
         // TODO: validate the userName with userId uniqueness
 
@@ -98,8 +99,7 @@ public class RoomService {
         ArrayList<RoomAmenity> roomAmenities = new ArrayList<>();
         for (String amenityId
                 : roomDto.getAmenitiesIdList()) {
-            Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(()
-                    -> new ResourceNotFoundException(ErrorMessages.AMENITY_NOT_FOUND_MSG + amenityId));
+            Amenity amenity = utilService.checkAmenityById(amenityId);
             UUID roomAmenityId = UUID.randomUUID();
             RoomAmenity roomAmenity = new RoomAmenity();
             roomAmenity.setId(roomAmenityId.toString());
@@ -114,8 +114,7 @@ public class RoomService {
 //        List<Amenity> amenitiesList = new ArrayList<>();
 //        for (String amenityId:
 //                roomDto.getAmenitiesIdList()) {
-//            Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(()
-//                    -> new ResourceNotFoundException(ErrorMessages.AMENITY_NOT_FOUND_MSG + amenityId));
+//            Amenity amenity = utilService.checkAmenityById(amenityId);
 //            amenitiesList.add(amenity);
 //        }
 //        room.setAmenities(amenitiesList);
@@ -168,8 +167,7 @@ public class RoomService {
      * @throws ResourceNotFoundException If the roomId is invalid
      */
     public ResponseEntity<?> getRoomById(final String roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
+        Room room = utilService.checkRoomById(roomId);
         Response response = new Response();
         response.setStatus(HttpStatus.OK.value());
 //        response.setError("");
@@ -183,16 +181,15 @@ public class RoomService {
     /**
      * This returns a ResponseEntity with the List of rooms of the requested room type. The roomType must be valid,
      * otherwise an exception will be thrown
-     * @param roomType Type of the room, not null
+     * @param roomTypeId ID of the room type, not null
      * @return List of rooms of requested room type, not null
      * @throws ResourceNotFoundException If the roomType is invalid
      */
-    public ResponseEntity<?> getRoomsByType(final String roomType) throws ResourceNotFoundException {
-        RoomType typeOfRoom = roomTypeRepository.findById(roomType).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.ROOM_TYPE_NOT_FOUND_MSG + roomType));
-        List<Room> rooms = roomRepository.findAllByRoomTypeIdAndDeletedFalse(roomType);
+    public ResponseEntity<?> getRoomsByType(final String roomTypeId) throws ResourceNotFoundException {
+        RoomType roomType = utilService.checkRoomTypeById(roomTypeId);
+        List<Room> rooms = roomRepository.findAllByRoomTypeIdAndDeletedFalse(roomTypeId);
         if (rooms.isEmpty()) {
-            return new ResponseEntity<>("There are no rooms found for the type : " + roomType, HttpStatus.OK);
+            return new ResponseEntity<>("There are no rooms found for the type : " + roomTypeId, HttpStatus.OK);
         }
 
         Response response = new Response();
@@ -205,8 +202,7 @@ public class RoomService {
 
     public ResponseEntity<String> updateRoom(final String roomId, final RoomUpdateDto roomUpdateDto)
             throws ResourceNotFoundException {
-        Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
+        Room room = utilService.checkRoomById(roomId);
 
         if (roomUpdateDto.getName() != null && roomUpdateDto.getName().length() > 0) {
             room.setName(roomUpdateDto.getName());
@@ -249,8 +245,7 @@ public class RoomService {
         if (!roomUpdateDto.getAmenitiesIdList().isEmpty()) {
             for (String amenityId
                     : roomUpdateDto.getAmenitiesIdList()) {
-                Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(()
-                        -> new ResourceNotFoundException(ErrorMessages.AMENITY_NOT_FOUND_MSG + amenityId));
+                Amenity amenity = utilService.checkAmenityById(amenityId);
                 if (roomAmenityRepository.findByRoomIdAndAmenityId(roomId, amenityId).isEmpty()) {
                     UUID roomAmenityId = UUID.randomUUID();
                     RoomAmenity roomAmenity = new RoomAmenity();
@@ -277,8 +272,7 @@ public class RoomService {
      * @throws ResourceNotFoundException If the roomId is invalid
      */
     public ResponseEntity<String> deleteRoom(final String roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
+        Room room = utilService.checkRoomById(roomId);
 
         roomRepository.deleteById(roomId);
         return new ResponseEntity<>("Room deleted successfully", HttpStatus.OK);
@@ -292,8 +286,7 @@ public class RoomService {
      * @throws ResourceNotFoundException If the userId is invalid
      */
     public ResponseEntity<?> getRoomsByUser(final String userId) throws ResourceNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND_MSG + userId));
+        User user = utilService.checkUserById(userId);
         List<Room> userRooms = roomRepository.findAllByUserIdAndDeletedFalse(userId);
         if (userRooms.isEmpty()) {
             return new ResponseEntity<>("There are no rooms found for the user : " + userId, HttpStatus.OK);
@@ -322,8 +315,7 @@ public class RoomService {
     }
 
 //    public ResponseEntity<?> getRoomAmenities(String roomId) {
-//        Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
-//                -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
+//            Room room = utilService.checkRoomById(roomId);
 //        List<Optional<?>> optionalAmenities = roomAmenityRepository.findByRoomId(roomId);
 //        if(!optionalAmenities.isEmpty()) {
 //            Response response = new Response();
