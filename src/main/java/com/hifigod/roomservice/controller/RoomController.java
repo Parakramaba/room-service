@@ -23,11 +23,18 @@ public class RoomController {
     private RoomService roomService;
 
 
-    @PostMapping("/new")
+    @ApiOperation(value = "Get all room types",
+            notes = "Return all room types")
+    @GetMapping("/room-types")
+    public ResponseEntity<?> getAllRoomTypes() {
+        return roomService.getAllRoomTypes();
+    }
+
     @ApiOperation(value = "Create a new room",
             notes = "Provide valid room details to create a new room",
             response = Response.class)
-    public ResponseEntity<?> createListeningRoom(final @RequestBody RoomDto roomDto) throws ResourceNotFoundException,
+    @PostMapping("/new")
+    public ResponseEntity<?> createRoom(final @RequestBody RoomDto roomDto) throws ResourceNotFoundException,
             ValidationException {
         return roomService.createRoom(roomDto);
     }
@@ -74,7 +81,7 @@ public class RoomController {
     }
 
     @ApiOperation(value = "Search the room by keyword",
-    notes = "Return all rooms that match name, description, country or city with the keywords' consistent words")
+        notes = "Return all rooms that match name, description, country or city with the keywords' consistent words")
     @GetMapping("/search/{keyword}")
     public ResponseEntity<?> searchRoom(final @PathVariable("keyword") String keyword) {
         return roomService.searchRoom(keyword);

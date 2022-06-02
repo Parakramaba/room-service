@@ -27,16 +27,10 @@ public class RoomService {
     private RoomRepository roomRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private RoomTypeRepository roomTypeRepository;
 
 //    @Autowired
 //    private RoomDocumentRepository roomDocumentRepository;
-
-    @Autowired
-    private AmenityRepository amenityRepository;
 
     @Autowired
     private RoomAmenityRepository roomAmenityRepository;
@@ -49,6 +43,19 @@ public class RoomService {
     @Autowired
     private UtilService utilService;
 
+
+    /**
+     * This returns a ResponseEntity with the List of all room types.
+     * @return List of all room types
+     */
+    public ResponseEntity<?> getAllRoomTypes() {
+        List<RoomType> roomTypes = roomTypeRepository.findAll();
+        if (roomTypes.isEmpty()) {
+            return new ResponseEntity<>("There are no room types found", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(roomTypes, HttpStatus.OK);
+    }
 
     public ResponseEntity<?> createRoom(final RoomDto roomDto) throws ResourceNotFoundException,
             ValidationException {

@@ -27,7 +27,8 @@ public class RoomType implements Serializable {
 
     @OneToMany(mappedBy = "roomType")
 //    @JsonBackReference
-    @JsonIgnoreProperties("roomType")
+//    @JsonIgnoreProperties("roomType")
+    @JsonIgnore
     private List<Room> rooms;
 
     @CreationTimestamp

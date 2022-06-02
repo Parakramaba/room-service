@@ -40,7 +40,7 @@ public class UtilService {
      * @return User, not null
      * @throws ResourceNotFoundException If the userId is invalid
      */
-    public User checkUserById(String userId) throws ResourceNotFoundException {
+    public User checkUserById(final String userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND_MSG + userId));
         return user;
@@ -51,7 +51,7 @@ public class UtilService {
      * @return Room, not null
      * @throws ResourceNotFoundException If the roomId is invalid
      */
-    public Room checkRoomById(String roomId) throws ResourceNotFoundException {
+    public Room checkRoomById(final String roomId) throws ResourceNotFoundException {
         Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
                 -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
         return room;
@@ -62,7 +62,7 @@ public class UtilService {
      * @return RoomType, not null
      * @throws ResourceNotFoundException If the roomTypeId is invalid
      */
-    public RoomType checkRoomTypeById(String roomTypeId) throws ResourceNotFoundException {
+    public RoomType checkRoomTypeById(final String roomTypeId) throws ResourceNotFoundException {
         RoomType roomType = roomTypeRepository.findById(roomTypeId).orElseThrow(()
                 -> new ResourceNotFoundException(ErrorMessages.ROOM_TYPE_NOT_FOUND_MSG + roomTypeId));
         return roomType;
@@ -73,7 +73,7 @@ public class UtilService {
      * @return Amenity, not null
      * @throws ResourceNotFoundException If the amenityId is invalid
      */
-    public Amenity checkAmenityById(String amenityId) throws ResourceNotFoundException {
+    public Amenity checkAmenityById(final String amenityId) throws ResourceNotFoundException {
         Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(()
                 -> new ResourceNotFoundException(ErrorMessages.AMENITY_NOT_FOUND_MSG + amenityId));
         return amenity;
