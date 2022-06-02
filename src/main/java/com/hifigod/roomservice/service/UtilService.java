@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * This Class implements all the common methods that needed in the other service classes
+ * This Class implements all the common methods that needed in the other service classes.
  */
 @Service("UtilService")
 public class UtilService {

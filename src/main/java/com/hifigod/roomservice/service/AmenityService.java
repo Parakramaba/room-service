@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * This Service class implements the business logic of the endpoints which are provided in the AmenityController
+ * This Service class implements the business logic of the endpoints which are provided in the AmenityController.
  * */
 @Service("AmenityService")
 public class AmenityService {
@@ -21,7 +21,7 @@ public class AmenityService {
     private AmenityRepository amenityRepository;
 
     /**
-     * This returns a ResponseEntity with the List of all amenities
+     * This returns a ResponseEntity with the List of all amenities.
      * @return List of all amenities
      */
     public ResponseEntity<?> getAllAmenities() {

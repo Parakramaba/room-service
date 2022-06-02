@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * This Service class implements the business logic of the endpoints which are provided in the AdminController
+ * This Service class implements the business logic of the endpoints which are provided in the AdminController.
  * */
 @Service("AdminService")
 public class AdminService {
@@ -32,7 +32,7 @@ public class AdminService {
 
     // HANDLING ROOM DATA
     /**
-     * This returns a ResponseEntity with the List of deleted rooms
+     * This returns a ResponseEntity with the List of deleted rooms.
      * @return List of deleted rooms
      */
     public ResponseEntity<?> getAllDeletedRooms() {

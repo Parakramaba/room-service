@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * This Controller class provides set of API endpoints which are using to retrieve amenities
+ * This Controller class provides set of API endpoints which are using to retrieve amenities.
  */
 @RestController
 @RequestMapping("/api/v1/rooms/amenities")

@@ -15,7 +15,7 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     List<Room> findAllByDeletedFalse();
 
     /**
-     * This returns a room if it is available
+     * This returns a room if it is available.
      * @param id ID of the room, not null
      * @return Details of the available room
      */

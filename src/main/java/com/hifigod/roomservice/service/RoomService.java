@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * This Service class implements the business logic of the endpoints which are provided in the RoomController
+ * This Service class implements the business logic of the endpoints which are provided in the RoomController.
  * */
 @Service("RoomService")
 public class RoomService {
@@ -147,7 +147,7 @@ public class RoomService {
     }
 
     /**
-     * This returns a ResponseEntity with the List of all available rooms
+     * This returns a ResponseEntity with the List of all available rooms.
      * @return List of all rooms
      */
     public ResponseEntity<?> getAllRooms() {
@@ -266,7 +266,7 @@ public class RoomService {
     }
 
     /**
-     * This will delete an existing room
+     * This will delete an existing room.
      * @param roomId ID of the room, not null
      * @return Success message of deletion, not null
      * @throws ResourceNotFoundException If the roomId is invalid
@@ -296,7 +296,7 @@ public class RoomService {
     }
 
     /**
-     * This returns ResponseEntity with the List of rooms that match with the search keyword
+     * This returns ResponseEntity with the List of rooms that match with the search keyword.
      * @param keyword Search keyword, not null
      * @return List of rooms that match with the keyword, not null
      */

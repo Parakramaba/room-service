@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * This Controller class provides set of API endpoints which are using in the system admin related matters
+ * This Controller class provides set of API endpoints which are using in the system admin related matters.
  */
 @RestController
 @RequestMapping("/api/v1/rooms/admin")

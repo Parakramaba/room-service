@@ -13,7 +13,7 @@ public interface RoomAmenityRepository extends JpaRepository<RoomAmenity, String
 //    List<Optional<?>> findByRoomId(String roomId);
 
     /**
-     * This returns a RoomAmenity if it already exists
+     * This returns a RoomAmenity if it already exists.
      * @param roomId ID of the room, not null
      * @param amenityId ID of the amenity, not null
      * @return RoomAmenity

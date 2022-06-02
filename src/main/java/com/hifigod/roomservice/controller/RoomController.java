@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * This Controller class provides set of API endpoints which are using in the Room handling process
+ * This Controller class provides set of API endpoints which are using in the Room handling process.
  */
 @RestController
 @RequestMapping("/api/v1/rooms")
