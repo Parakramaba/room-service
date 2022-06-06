@@ -196,22 +196,22 @@ class RoomServiceTest {
         Room room1 = new MockObjects().getAvailableRoom1();
         Room room2 = new MockObjects().getAvailableRoom2();
 
-        when(roomRepository.findAllByDeletedFalse())
+        when(roomRepository.findAllByIsDeletedFalse())
                 .thenReturn(Stream.of(room1, room2).collect(Collectors.toList()));
 
         assertEquals(HttpStatus.OK, roomService.getAllRooms().getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findAllByDeletedFalse();
+        verify(roomRepository, times(1)).findAllByIsDeletedFalse();
     }
 
     @Test
     void getAllRooms_WhenNoRoomsFound_Success() {
-        when(roomRepository.findAllByDeletedFalse())
+        when(roomRepository.findAllByIsDeletedFalse())
                 .thenReturn(Collections.emptyList());
 
         assertEquals(HttpStatus.OK, roomService.getAllRooms().getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findAllByDeletedFalse();
+        verify(roomRepository, times(1)).findAllByIsDeletedFalse();
     }
     // / GET ALL ROOMS
 
@@ -219,22 +219,22 @@ class RoomServiceTest {
     @Test
     void getRoomById_Success() {
         Room room = new MockObjects().getAvailableRoom1();
-        when(roomRepository.findByIdAndDeletedFalse(room.getId()))
+        when(roomRepository.findByIdAndIsDeletedFalse(room.getId()))
                 .thenReturn(Optional.of(room));
 
         assertEquals(HttpStatus.OK, roomService.getRoomById(room.getId()).getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findByIdAndDeletedFalse(room.getId());
+        verify(roomRepository, times(1)).findByIdAndIsDeletedFalse(room.getId());
     }
 
     @Test
     void getRoomById_WhenRoomNotFound_ThrowResourceNotFoundException() {
-        when(roomRepository.findByIdAndDeletedFalse("111"))
+        when(roomRepository.findByIdAndIsDeletedFalse("111"))
                 .thenThrow(ResourceNotFoundException.class);
 
         assertThrows(ResourceNotFoundException.class, () -> roomService.getRoomById("111"),
                 "Should throw ResourceNotFoundException");
-        verify(roomRepository, times(1)).findByIdAndDeletedFalse("111");
+        verify(roomRepository, times(1)).findByIdAndIsDeletedFalse("111");
     }
     // / GET ROOM BY ID
 
@@ -247,12 +247,12 @@ class RoomServiceTest {
 
         when(roomTypeRepository.findById("111"))
                 .thenReturn(Optional.of(roomType));
-        when(roomRepository.findAllByRoomTypeIdAndDeletedFalse("111"))
+        when(roomRepository.findAllByRoomTypeIdAndIsDeletedFalse("111"))
                 .thenReturn(new ArrayList<>() {{ add(room1); add(room2); }});
 
         assertEquals(HttpStatus.OK, roomService.getRoomsByType("111").getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findAllByRoomTypeIdAndDeletedFalse("111");
+        verify(roomRepository, times(1)).findAllByRoomTypeIdAndIsDeletedFalse("111");
     }
 
     @Test
@@ -262,12 +262,12 @@ class RoomServiceTest {
 
         when(roomTypeRepository.findById("111"))
                 .thenThrow(ResourceNotFoundException.class);
-        when(roomRepository.findAllByRoomTypeIdAndDeletedFalse("111"))
+        when(roomRepository.findAllByRoomTypeIdAndIsDeletedFalse("111"))
                 .thenReturn(new ArrayList<>() {{ add(room1); add(room2); }});
 
         assertThrows(ResourceNotFoundException.class, () -> roomService.getRoomsByType("111"),
                 "Should throw ResourceNotFoundException");
-        verify(roomRepository, never()).findAllByRoomTypeIdAndDeletedFalse("111");
+        verify(roomRepository, never()).findAllByRoomTypeIdAndIsDeletedFalse("111");
     }
 
     @Test
@@ -276,12 +276,12 @@ class RoomServiceTest {
 
         when(roomTypeRepository.findById("111"))
                 .thenReturn(Optional.of(roomType));
-        when(roomRepository.findAllByRoomTypeIdAndDeletedFalse("111"))
+        when(roomRepository.findAllByRoomTypeIdAndIsDeletedFalse("111"))
                 .thenReturn(Collections.emptyList());
 
         assertEquals(HttpStatus.OK, roomService.getRoomsByType("111").getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findAllByRoomTypeIdAndDeletedFalse("111");
+        verify(roomRepository, times(1)).findAllByRoomTypeIdAndIsDeletedFalse("111");
     }
     // / GET ROOMS BY TYPE
 
@@ -291,7 +291,7 @@ class RoomServiceTest {
         RoomUpdateDto roomUpdateDto = new MockObjects().getRoomUpdateDto();
         Room room = new MockObjects().getAvailableRoom1();
 
-        when(roomRepository.findByIdAndDeletedFalse("111"))
+        when(roomRepository.findByIdAndIsDeletedFalse("111"))
                 .thenReturn(Optional.of(room));
         when(roomRepository.save(room))
                 .thenReturn(room);
@@ -304,7 +304,7 @@ class RoomServiceTest {
     @Test
     void updateRoom_WhenRoomNotFound_ThrowResourceNotFoundException() {
         RoomUpdateDto roomUpdateDto = new MockObjects().getRoomUpdateDto();
-        when(roomRepository.findByIdAndDeletedFalse("111"))
+        when(roomRepository.findByIdAndIsDeletedFalse("111"))
                 .thenThrow(ResourceNotFoundException.class);
 
         assertThrows(ResourceNotFoundException.class, () -> roomService.updateRoom("111", roomUpdateDto),
@@ -320,7 +320,7 @@ class RoomServiceTest {
     @Test
     void deleteRoom_Success() {
         Room room = new MockObjects().getAvailableRoom1();
-        when(roomRepository.findByIdAndDeletedFalse("1"))
+        when(roomRepository.findByIdAndIsDeletedFalse("1"))
                 .thenReturn(Optional.of(room));
 
         assertEquals(HttpStatus.OK, roomService.deleteRoom("1").getStatusCode(),
@@ -330,7 +330,7 @@ class RoomServiceTest {
 
     @Test
     void deleteRoom_WhenRoomNotFound_ThrowResourceNotFoundException() {
-        when(roomRepository.findByIdAndDeletedFalse("1"))
+        when(roomRepository.findByIdAndIsDeletedFalse("1"))
                 .thenThrow(ResourceNotFoundException.class);
 
         assertThrows(ResourceNotFoundException.class, () -> roomService.deleteRoom("1"),
@@ -348,12 +348,12 @@ class RoomServiceTest {
 
         when(userRepository.findById("111"))
                 .thenReturn(Optional.of(user));
-        when(roomRepository.findAllByUserIdAndDeletedFalse("111"))
+        when(roomRepository.findAllByUserIdAndIsDeletedFalse("111"))
                 .thenReturn(Stream.of(room1, room2).collect(Collectors.toList()));
 
         assertEquals(HttpStatus.OK, roomService.getRoomsByUser("111").getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findAllByUserIdAndDeletedFalse("111");
+        verify(roomRepository, times(1)).findAllByUserIdAndIsDeletedFalse("111");
     }
 
     @Test
@@ -364,12 +364,12 @@ class RoomServiceTest {
 
         when(userRepository.findById("111"))
                 .thenThrow(ResourceNotFoundException.class);
-        when(roomRepository.findAllByUserIdAndDeletedFalse("111"))
+        when(roomRepository.findAllByUserIdAndIsDeletedFalse("111"))
                 .thenReturn(Stream.of(room1, room2).collect(Collectors.toList()));
 
         assertThrows(ResourceNotFoundException.class, () -> roomService.getRoomsByUser("111"),
                 "Should throw ResourceNotFoundException");
-        verify(roomRepository, never()).findAllByUserIdAndDeletedFalse("111");
+        verify(roomRepository, never()).findAllByUserIdAndIsDeletedFalse("111");
     }
 
     @Test
@@ -378,12 +378,12 @@ class RoomServiceTest {
 
         when(userRepository.findById("111"))
                 .thenReturn(Optional.of(user));
-        when(roomRepository.findAllByUserIdAndDeletedFalse("111"))
+        when(roomRepository.findAllByUserIdAndIsDeletedFalse("111"))
                 .thenReturn(Collections.emptyList());
 
         assertEquals(HttpStatus.OK, roomService.getRoomsByUser("111").getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findAllByUserIdAndDeletedFalse("111");
+        verify(roomRepository, times(1)).findAllByUserIdAndIsDeletedFalse("111");
 
     }
     // / GET ROOMS BY USER

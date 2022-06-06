@@ -12,25 +12,25 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     /**
      * @return List of all available rooms, not null
      */
-    List<Room> findAllByDeletedFalse();
+    List<Room> findAllByIsDeletedFalse();
 
     /**
      * This returns a room if it is available.
      * @param id ID of the room, not null
      * @return Details of the available room
      */
-    Optional<Room> findByIdAndDeletedFalse(String id);
+    Optional<Room> findByIdAndIsDeletedFalse(String id);
 
     /**
      * @return List of all deleted rooms, not null
      */
-    List<Room> findAllByDeletedTrue();
+    List<Room> findAllByIsDeletedTrue();
 
     /**
      * @param roomType Type of the room, not null
      * @return List of all available rooms of a certain room type, not null
      */
-    List<Room> findAllByRoomTypeIdAndDeletedFalse(String roomType);
+    List<Room> findAllByRoomTypeIdAndIsDeletedFalse(String roomType);
 
 //    Optional<Room> findByIdAndDeletedTrue(String id);
 
@@ -40,14 +40,14 @@ public interface RoomRepository extends JpaRepository<Room, String> {
      * @param userId ID of the user, not null
      * @return List of all available rooms of a user, not null
      */
-    List<Room> findAllByUserIdAndDeletedFalse(String userId);
+    List<Room> findAllByUserIdAndIsDeletedFalse(String userId);
 
     /**
      *
      * @param keyword Search keyword, not null
      * @return List of all the rooms that match with the search keyword, not null
      */
-    @Query(value = "SELECT * FROM room WHERE MATCH(name, description, country, city) AGAINST (?1) AND deleted=false",
+    @Query(value = "SELECT * FROM room WHERE MATCH(name, description, country, city) AGAINST (?1) AND is_deleted=false",
             nativeQuery = true)
     List<Room> searchRoom(String keyword);
 }

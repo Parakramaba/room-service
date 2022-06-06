@@ -36,7 +36,7 @@ public class AdminService {
      * @return List of deleted rooms
      */
     public ResponseEntity<?> getAllDeletedRooms() {
-        List<Room> rooms = roomRepository.findAllByDeletedTrue();
+        List<Room> rooms = roomRepository.findAllByIsDeletedTrue();
         if (rooms.isEmpty()) {
             return new ResponseEntity<>("There are no deleted rooms found", HttpStatus.OK);
         }

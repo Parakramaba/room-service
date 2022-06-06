@@ -1,8 +1,13 @@
 package com.hifigod.roomservice.model;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
@@ -12,7 +17,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "roomAvailability")
-@SQLDelete(sql = "UPDATE room_availability SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE room_availability SET is_deleted = true WHERE id=?")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -31,13 +36,16 @@ public class RoomAvailability implements Serializable {
 
     private String day;
 
-    private String session;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime startTime;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime endTime;
+
+    @Generated(value = GenerationTime.ALWAYS)
+    @Column(columnDefinition = "boolean default false")
+    @JsonIgnore
+    private boolean isDeleted = Boolean.FALSE;
 
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -47,7 +55,7 @@ public class RoomAvailability implements Serializable {
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime updatedAt;
 
-    @JsonIgnore
-    private boolean deleted = Boolean.FALSE;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    private LocalDateTime deletedAt;
 
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.Generated;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "roomAmenity")
-@SQLDelete(sql = "UPDATE room_amenity SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE room_amenity SET is_deleted = true WHERE id=?")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -35,6 +36,11 @@ public class RoomAmenity implements Serializable {
     @JsonIgnoreProperties("roomAmenities")
     private Amenity amenity;
 
+    @Generated(value = GenerationTime.ALWAYS)
+    @Column(columnDefinition = "boolean default false")
+    @JsonIgnore
+    private boolean isDeleted = Boolean.FALSE;
+
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -43,6 +49,7 @@ public class RoomAmenity implements Serializable {
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime updatedAt;
 
-    @JsonIgnore
-    private boolean deleted = Boolean.FALSE;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonIgnore
+//    private LocalDateTime deletedAt;
 }

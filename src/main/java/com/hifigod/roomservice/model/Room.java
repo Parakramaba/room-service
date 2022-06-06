@@ -19,7 +19,7 @@ import java.util.List;
 //@Indexed(index = "full_text_idx")
 @Table(name = "room",
         uniqueConstraints = @UniqueConstraint(columnNames = {"name", "userId"}))
-@SQLDelete(sql = "UPDATE room SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE room SET is_deleted = true, deleted_at = UTC_TIMESTAMP() WHERE id=?")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -91,6 +91,14 @@ public class Room implements Serializable {
     @Column(columnDefinition = "varchar(50) default 'Not Verified'")
     private String verifyStatus;
 
+    @Generated(value = GenerationTime.ALWAYS)
+    @Column(columnDefinition = "boolean default true")
+    private boolean isOnAir = Boolean.TRUE;
+
+    @Generated(value = GenerationTime.ALWAYS)
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted = Boolean.FALSE;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime verifiedOn;
 
@@ -105,8 +113,8 @@ public class Room implements Serializable {
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime updatedAt;
 
-//    @JsonIgnore
-    private boolean deleted = Boolean.FALSE;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime deletedAt;
 
 //    @ManyToMany
 //    @JoinTable(

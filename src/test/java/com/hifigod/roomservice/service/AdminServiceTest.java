@@ -38,22 +38,22 @@ class AdminServiceTest {
         Room room1 = new MockObjects().getDeletedRoom1();
         Room room2 = new MockObjects().getDeletedRoom2();
 
-        when(roomRepository.findAllByDeletedTrue())
+        when(roomRepository.findAllByIsDeletedTrue())
                 .thenReturn(Stream.of(room1, room2).collect(Collectors.toList()));
 
         assertEquals(HttpStatus.OK, adminService.getAllDeletedRooms().getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findAllByDeletedTrue();
+        verify(roomRepository, times(1)).findAllByIsDeletedTrue();
     }
 
     @Test
     void getAllDeletedRooms_WhenNoDeletedRoomsFound_Success() {
-        when(roomRepository.findAllByDeletedTrue())
+        when(roomRepository.findAllByIsDeletedTrue())
                 .thenReturn(Collections.emptyList());
 
         assertEquals(HttpStatus.OK, adminService.getAllDeletedRooms().getStatusCode(),
                 "Should have Status code '200 OK'");
-        verify(roomRepository, times(1)).findAllByDeletedTrue();
+        verify(roomRepository, times(1)).findAllByIsDeletedTrue();
 
     }
     // / TEST ROOM DATA

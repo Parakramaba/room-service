@@ -135,7 +135,6 @@ public class RoomService {
             roomAvailability.setId(roomAvailabilityId.toString());
             roomAvailability.setRoom(room);
             roomAvailability.setDay(availableSlot.getDay());
-            roomAvailability.setSession(availableSlot.getSession());
             roomAvailability.setStartTime(availableSlot.getStartTime());
             roomAvailability.setEndTime(availableSlot.getEndTime());
             roomAvailabilityRepository.save(roomAvailability);
@@ -158,7 +157,7 @@ public class RoomService {
      * @return List of all rooms
      */
     public ResponseEntity<?> getAllRooms() {
-        List<Room> rooms = roomRepository.findAllByDeletedFalse();
+        List<Room> rooms = roomRepository.findAllByIsDeletedFalse();
         if (rooms.isEmpty()) {
             return new ResponseEntity<>("There are no rooms found", HttpStatus.OK);
         }
@@ -194,7 +193,7 @@ public class RoomService {
      */
     public ResponseEntity<?> getRoomsByType(final String roomTypeId) throws ResourceNotFoundException {
         RoomType roomType = utilService.checkRoomTypeById(roomTypeId);
-        List<Room> rooms = roomRepository.findAllByRoomTypeIdAndDeletedFalse(roomTypeId);
+        List<Room> rooms = roomRepository.findAllByRoomTypeIdAndIsDeletedFalse(roomTypeId);
         if (rooms.isEmpty()) {
             return new ResponseEntity<>("There are no rooms found for the type : " + roomTypeId, HttpStatus.OK);
         }
@@ -294,7 +293,7 @@ public class RoomService {
      */
     public ResponseEntity<?> getRoomsByUser(final String userId) throws ResourceNotFoundException {
         User user = utilService.checkUserById(userId);
-        List<Room> userRooms = roomRepository.findAllByUserIdAndDeletedFalse(userId);
+        List<Room> userRooms = roomRepository.findAllByUserIdAndIsDeletedFalse(userId);
         if (userRooms.isEmpty()) {
             return new ResponseEntity<>("There are no rooms found for the user : " + userId, HttpStatus.OK);
         }

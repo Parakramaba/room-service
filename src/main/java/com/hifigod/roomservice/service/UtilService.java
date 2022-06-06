@@ -52,7 +52,7 @@ public class UtilService {
      * @throws ResourceNotFoundException If the roomId is invalid
      */
     public Room checkRoomById(final String roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findByIdAndDeletedFalse(roomId).orElseThrow(()
+        Room room = roomRepository.findByIdAndIsDeletedFalse(roomId).orElseThrow(()
                 -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
         return room;
     }
