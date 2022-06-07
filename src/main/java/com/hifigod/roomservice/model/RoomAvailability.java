@@ -42,7 +42,7 @@ public class RoomAvailability implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime endTime;
 
-    @Generated(value = GenerationTime.ALWAYS)
+    @Generated(value = GenerationTime.INSERT)
     @Column(columnDefinition = "boolean default false")
     @JsonIgnore
     private boolean isDeleted = Boolean.FALSE;

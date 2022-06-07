@@ -59,6 +59,20 @@ public class RoomController {
         return roomService.getRoomsByType(roomTypeId);
     }
 
+    @ApiOperation(value = "Make a room On air")
+    @PutMapping("/on-air/{roomId}/")
+    public ResponseEntity<?> makeRoomOnAir(final @PathVariable("roomId") String roomId)
+            throws ResourceNotFoundException {
+        return roomService.makeRoomOnAir(roomId);
+    }
+
+    @ApiOperation(value = "Make a room Off air")
+    @PutMapping("/off-air/{roomId}/")
+    public ResponseEntity<?> makeRoomOffAir(final @PathVariable("roomId") String roomId)
+            throws ResourceNotFoundException {
+        return roomService.makeRoomOffAir(roomId);
+    }
+
     @ApiOperation(value = "Update the room details",
             notes = "Provide valid room details to update")
     @PutMapping("/{id}")

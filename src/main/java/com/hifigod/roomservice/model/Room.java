@@ -91,11 +91,11 @@ public class Room implements Serializable {
     @Column(columnDefinition = "varchar(50) default 'Not Verified'")
     private String verifyStatus;
 
-    @Generated(value = GenerationTime.ALWAYS)
+    @Generated(value = GenerationTime.INSERT)
     @Column(columnDefinition = "boolean default true")
     private boolean isOnAir = Boolean.TRUE;
 
-    @Generated(value = GenerationTime.ALWAYS)
+    @Generated(value = GenerationTime.INSERT)
     @Column(columnDefinition = "boolean default false")
     private boolean isDeleted = Boolean.FALSE;
 

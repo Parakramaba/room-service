@@ -201,6 +201,36 @@ public class RoomService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * This makes a room on-air.
+     * @param roomId ID of the room, not null
+     * @return Success message of room on-air
+     * @throws ResourceNotFoundException If the roomId is invalid
+     */
+    public ResponseEntity<?> makeRoomOnAir(final String roomId) throws ResourceNotFoundException {
+        Room room = utilService.checkRoomById(roomId);
+
+        room.setOnAir(true);
+        roomRepository.save(room);
+
+        return new ResponseEntity<>("Your room is now on air", HttpStatus.OK);
+    }
+
+    /**
+     * This makes a room off-air.
+     * @param roomId ID of the room, not null
+     * @return Success message of room off-air
+     * @throws ResourceNotFoundException If the roomId is invalid
+     */
+    public ResponseEntity<?> makeRoomOffAir(final String roomId) throws ResourceNotFoundException {
+        Room room = utilService.checkRoomById(roomId);
+
+        room.setOnAir(false);
+        roomRepository.save(room);
+
+        return new ResponseEntity<>("Your room is now off air", HttpStatus.OK);
+    }
+
     public ResponseEntity<String> updateRoom(final String roomId, final RoomUpdateDto roomUpdateDto)
             throws ResourceNotFoundException {
         Room room = utilService.checkRoomById(roomId);
@@ -267,7 +297,7 @@ public class RoomService {
     }
 
     /**
-     * This will delete an existing room.
+     * This deletes an existing room.
      * @param roomId ID of the room, not null
      * @return Success message of deletion, not null
      * @throws ResourceNotFoundException If the roomId is invalid

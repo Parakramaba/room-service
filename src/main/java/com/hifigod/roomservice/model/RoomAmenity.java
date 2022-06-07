@@ -36,7 +36,7 @@ public class RoomAmenity implements Serializable {
     @JsonIgnoreProperties("roomAmenities")
     private Amenity amenity;
 
-    @Generated(value = GenerationTime.ALWAYS)
+    @Generated(value = GenerationTime.INSERT)
     @Column(columnDefinition = "boolean default false")
     @JsonIgnore
     private boolean isDeleted = Boolean.FALSE;
