@@ -52,9 +52,9 @@ public class RoomController {
         return roomService.getRoomById(roomId);
     }
 
-    @ApiOperation(value = "Get rooms by the type")
-    @GetMapping("/by-type/{roomType}")
-    public ResponseEntity<?> getRoomsByType(final @PathVariable("roomType") String roomTypeId)
+    @ApiOperation(value = "Get rooms by the room type")
+    @GetMapping("/by-type/{roomTypeId}")
+    public ResponseEntity<?> getRoomsByType(final @PathVariable("roomTypeId") String roomTypeId)
             throws ResourceNotFoundException {
         return roomService.getRoomsByType(roomTypeId);
     }
@@ -78,6 +78,14 @@ public class RoomController {
     public ResponseEntity<?> getRoomsByUser(final @PathVariable("userId") String userId)
             throws ResourceNotFoundException {
         return roomService.getRoomsByUser(userId);
+    }
+
+    @ApiOperation(value = "Get all rooms owned by a user filtered by the room type")
+    @GetMapping("/of-user/{userId}/of-room-type/{roomTypeId}")
+    public ResponseEntity<?> getUserRoomsByType(final @PathVariable("userId") String userId,
+                                                final @PathVariable("roomTypeId") String roomTypeId)
+            throws ResourceNotFoundException {
+        return roomService.getUserRoomsByType(userId, roomTypeId);
     }
 
     @ApiOperation(value = "Search the room by keyword",

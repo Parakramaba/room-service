@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.time.LocalTime;
 
-@ApiModel(description = "Details about the rooms' availability")
+@ApiModel(description = "Details about the available time of the room")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -17,14 +17,11 @@ public class RoomAvailabilityDto {
     @ApiModelProperty(notes = "Day of the week")
     private String day;
 
-    @ApiModelProperty(notes = "Morning or Evening")
-    private String session;
-
-    @ApiModelProperty(notes = "Session start time")
+    @ApiModelProperty(notes = "Start time in format of HH:mm")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime startTime;
 
-    @ApiModelProperty(notes = "Session end time")
+    @ApiModelProperty(notes = "End time in format of HH:mm")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime endTime;
 }

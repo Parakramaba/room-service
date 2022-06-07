@@ -63,24 +63,13 @@ public class RoomService {
             throw new ValidationException("Room name is required");
         }
 
-//        if(roomDto.getHourlyRate() < 0)
-//            throw new ValidationException("Hourly rate should be zero or positive number");
-//        if(roomDto.getNoOfGuest() < 0)
-//            throw new ValidationException("Number of guest should be zero or positive number");
-
         User user = utilService.checkUserById(roomDto.getUserId());
         RoomType roomType = utilService.checkRoomTypeById(roomDto.getRoomTypeId());
 
         // TODO: validate the userName with userId uniqueness
 
-//        Optional<Room> optionalRoom = roomRepository.findByNameAndUserId(roomDto.getName(), user.getUserId());
-//
-//        if(optionalRoom.isPresent())
-//            throw new ValidationException("You have a room with the same name.Please give different room name");
-
         // Save basic room details
         UUID roomId = UUID.randomUUID();
-//        String roomIdAsString = roomId.toString();
         Room room = new Room();
         room.setId(roomId.toString());
         room.setUser(user);
@@ -102,10 +91,30 @@ public class RoomService {
         room.setLongitude(roomDto.getLongitude());
         room.setSetupCost(roomDto.getSetupCost());
 
-        // Save room amenities
+        // Set room amenities
+        List<RoomAmenity> roomAmenities = setRoomAmenities(roomDto.getAmenitiesIdList(), room);
+
+        // Set room availabilities
+        List<RoomAvailability> roomAvailabilities = setRoomAvailabilities(roomDto.getRoomAvailabilities(), room);
+
+        roomRepository.save(room);
+        roomAmenityRepository.saveAll(roomAmenities);
+        roomAvailabilityRepository.saveAll(roomAvailabilities);
+
+        // TODO : setup information need to be handled
+
+        Response response = new Response(HttpStatus.OK.value(), "", "Room created Successfully",
+                LocalDateTime.now(), room.getId());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // SET AMENITIES OF THE ROOM
+    private List<RoomAmenity> setRoomAmenities(final List<String> roomAmenityIds, final Room room)
+            throws ResourceNotFoundException {
         ArrayList<RoomAmenity> roomAmenities = new ArrayList<>();
         for (String amenityId
-                : roomDto.getAmenitiesIdList()) {
+                : roomAmenityIds) {
             Amenity amenity = utilService.checkAmenityById(amenityId);
             UUID roomAmenityId = UUID.randomUUID();
             RoomAmenity roomAmenity = new RoomAmenity();
@@ -113,44 +122,30 @@ public class RoomService {
             roomAmenity.setRoom(room);
             roomAmenity.setAmenity(amenity);
             roomAmenities.add(roomAmenity);
-
         }
-        roomRepository.save(room);
-        roomAmenityRepository.saveAll(roomAmenities);
+        return roomAmenities;
+    }
+    // / SET AMENITIES OF THE ROOM
 
-//        List<Amenity> amenitiesList = new ArrayList<>();
-//        for (String amenityId:
-//                roomDto.getAmenitiesIdList()) {
-//            Amenity amenity = utilService.checkAmenityById(amenityId);
-//            amenitiesList.add(amenity);
-//        }
-//        room.setAmenities(amenitiesList);
+    // SET AVAILABILITIES OF THE ROOM
+    private List<RoomAvailability> setRoomAvailabilities(final List<RoomAvailabilityDto> roomOpenTimes,
+                                                         final Room room) {
+        List<RoomAvailability> roomAvailabilities = new ArrayList<>();
 
-        // TODO: handle the room availabilities when verify
-        // Save room availabilities
-        for (RoomAvailabilityDto availableSlot
-                : roomDto.getRoomAvailabilities()) {
-                UUID roomAvailabilityId = UUID.randomUUID();
+        for (RoomAvailabilityDto roomOpenTime
+                : roomOpenTimes) {
+            UUID roomAvailabilityId = UUID.randomUUID();
             RoomAvailability roomAvailability = new RoomAvailability();
             roomAvailability.setId(roomAvailabilityId.toString());
             roomAvailability.setRoom(room);
-            roomAvailability.setDay(availableSlot.getDay());
-            roomAvailability.setStartTime(availableSlot.getStartTime());
-            roomAvailability.setEndTime(availableSlot.getEndTime());
-            roomAvailabilityRepository.save(roomAvailability);
+            roomAvailability.setDay(roomOpenTime.getDay());
+            roomAvailability.setStartTime(roomOpenTime.getStartTime());
+            roomAvailability.setEndTime(roomOpenTime.getEndTime());
+            roomAvailabilities.add(roomAvailability);
         }
-
-        // TODO : setup information need to be handled
-
-        Response response = new Response();
-        response.setStatus(HttpStatus.OK.value());
-        response.setError("");
-        response.setMessage("Room created Successfully");
-        response.setDateTime(LocalDateTime.now());
-        response.setData(room.getId());
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return roomAvailabilities;
     }
+    // / SET AVAILABILITIES OF THE ROOM
 
     /**
      * This returns a ResponseEntity with the List of all available rooms.
@@ -296,6 +291,29 @@ public class RoomService {
         List<Room> userRooms = roomRepository.findAllByUserIdAndIsDeletedFalse(userId);
         if (userRooms.isEmpty()) {
             return new ResponseEntity<>("There are no rooms found for the user : " + userId, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(userRooms, HttpStatus.OK);
+    }
+
+    /**
+     * This returns ResponseEntity with the List of specific type of user rooms. The userId and roomTypeId
+     * must be valid, otherwise an exception will be thrown
+     * @param userId ID of the user, not null
+     * @param roomTypeId ID of the room type, not null
+     * @return List of user rooms of specific room type, not null
+     * @throws ResourceNotFoundException If the userId or roomTypeId is invalid
+     */
+    public ResponseEntity<?> getUserRoomsByType(final String userId, final String roomTypeId)
+            throws ResourceNotFoundException {
+        User user = utilService.checkUserById(userId);
+        RoomType roomType = utilService.checkRoomTypeById(roomTypeId);
+
+        List<Room> userRooms = roomRepository.findAllByUserIdAndRoomTypeIdAndIsDeletedFalse(userId, roomTypeId);
+
+        if (userRooms.isEmpty()) {
+            return new ResponseEntity<>("There are no " + roomType.getName() +" rooms found for the user " + userId
+                    , HttpStatus.OK);
         }
 
         return new ResponseEntity<>(userRooms, HttpStatus.OK);

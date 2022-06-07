@@ -47,5 +47,4 @@ public class RoomUpdateDto {
     @ApiModelProperty(notes = "Available time slots of the room")
     private List<RoomAvailabilityDto> roomAvailabilities;
 
-
 }

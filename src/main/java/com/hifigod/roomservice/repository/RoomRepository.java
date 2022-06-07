@@ -43,6 +43,13 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     List<Room> findAllByUserIdAndIsDeletedFalse(String userId);
 
     /**
+     * @param userId ID of the user, not null
+     * @param roomTypeId ID of the room type, not null
+     * @return List of all specific type of available rooms of a user, not null
+     */
+    List<Room> findAllByUserIdAndRoomTypeIdAndIsDeletedFalse(String userId, String roomTypeId);
+
+    /**
      *
      * @param keyword Search keyword, not null
      * @return List of all the rooms that match with the search keyword, not null
